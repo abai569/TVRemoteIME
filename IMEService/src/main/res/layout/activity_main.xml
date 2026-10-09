@@ -14,13 +14,13 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:padding="16dp">
+        android:padding="12dp">
 
         <!-- App Header（保留“检查更新”按钮） -->
         <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"
+            android:layout_marginBottom="10dp"
             android:focusable="false"
             android:clickable="false"
             app:cardCornerRadius="16dp"
@@ -31,14 +31,14 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:padding="24dp">
+                android:padding="16dp">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/app_name"
                     android:textColor="@color/md_theme_onPrimary"
-                    android:textSize="28sp"
+                    android:textSize="24sp"
                     android:textStyle="bold" />
 
                 <TextView
@@ -53,7 +53,7 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="12dp"
+                    android:layout_marginTop="8dp"
                     android:orientation="horizontal"
                     android:gravity="center_vertical">
 
@@ -88,7 +88,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"
+            android:layout_marginBottom="10dp"
             android:orientation="horizontal"
             android:gravity="top"
             android:weightSum="2">
@@ -116,7 +116,7 @@
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
                         android:gravity="top"
-                        android:layout_marginTop="12dp">
+                        android:layout_marginTop="8dp">
 
                         <!-- 左：二维码（居左，与标题左对齐） -->
                         <LinearLayout
@@ -203,7 +203,7 @@
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
                         android:gravity="center_vertical"
-                        android:layout_marginTop="12dp">
+                        android:layout_marginTop="8dp">
 
                         <TextView
                             android:layout_width="0dp"
@@ -226,7 +226,7 @@
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
                         android:gravity="center_vertical"
-                        android:layout_marginTop="12dp">
+                        android:layout_marginTop="8dp">
 
                         <TextView
                             android:layout_width="0dp"
@@ -249,7 +249,7 @@
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
                         android:gravity="center_vertical"
-                        android:layout_marginTop="12dp">
+                        android:layout_marginTop="8dp">
 
                         <TextView
                             android:layout_width="0dp"
@@ -269,7 +269,7 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="12dp"
+                        android:layout_marginTop="8dp"
                         android:text="手动启动后需开启ADB模式才能使用远程输入及遥控功能"
                         android:textColor="@color/md_theme_onSecondaryContainer"
                         android:textSize="12sp" />
@@ -284,7 +284,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"
+            android:layout_marginBottom="10dp"
             android:orientation="horizontal"
             android:gravity="top"
             android:weightSum="2">
@@ -312,7 +312,7 @@
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
                         android:gravity="center_vertical"
-                        android:layout_marginTop="12dp">
+                        android:layout_marginTop="8dp">
 
                         <TextView
                             android:layout_width="0dp"
@@ -333,7 +333,7 @@
                         android:id="@+id/tvAccessibilityStatus"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="12dp"
+                        android:layout_marginTop="8dp"
                         android:text="未启用"
                         android:textColor="@color/status_error"
                         android:textSize="14sp"
@@ -366,7 +366,7 @@
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
                         android:gravity="center_vertical"
-                        android:layout_marginTop="12dp">
+                        android:layout_marginTop="8dp">
 
                         <com.google.android.material.textfield.TextInputLayout
                             android:layout_width="0dp"
