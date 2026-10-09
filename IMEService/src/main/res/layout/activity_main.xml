@@ -116,7 +116,7 @@
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
                         android:gravity="top"
-                        android:layout_marginTop="12dp">
+                        android:layout_marginTop="4dp">
 
                         <!-- 左：二维码（居左） -->
                         <LinearLayout
@@ -126,8 +126,8 @@
 
                             <ImageView
                                 android:id="@+id/ivQRCode"
-                                android:layout_width="240dp"
-                                android:layout_height="240dp"
+                                android:layout_width="200dp"
+                                android:layout_height="200dp"
                                 android:contentDescription="QR Code" />
 
                         </LinearLayout>
@@ -161,20 +161,20 @@
 
                             </com.google.android.material.textfield.TextInputLayout>
 
+                            <!-- 网址（输入框下方） -->
+                            <TextView
+                                android:id="@+id/tvAddress"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="8dp"
+                                android:text="http://192.168.1.100:9978"
+                                android:textColor="@color/md_theme_primary"
+                                android:textSize="15sp"
+                                android:textStyle="bold" />
+
                         </LinearLayout>
 
                     </LinearLayout>
-
-                    <!-- 网址（独立一行，完整显示） -->
-                    <TextView
-                        android:id="@+id/tvAddress"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="12dp"
-                        android:text="http://192.168.1.100:9978"
-                        android:textColor="@color/md_theme_primary"
-                        android:textSize="15sp"
-                        android:textStyle="bold" />
 
                 </LinearLayout>
 
