@@ -2,6 +2,8 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
+> **发布纪律（强制，详见 AGENTS.md）**：CI 失败的版本必须用同一版本号修复重发，严禁跳版本；发布成功 = Actions success + Release asset 存在；versionCode 公式 major*10000+minor*100+patch 单调递增；在线更新直接读 GitHub 最新 Release，不依赖 version.json；推送 .github/workflows/ 必须用本机具备 workflow scope 的凭据。
+
 ## Project Overview
 
 TVRemoteIME (小盒精灵) is an Android TV box management application that provides:
