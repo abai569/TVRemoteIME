@@ -1,6 +1,6 @@
 {
-    "versionCode": 21,
-    "versionName": "2.1.1",
-    "installAPK": "https://raw.githubusercontent.com/abai569/TVRemoteIME/master/released/IMEService-2.1.1.apk",
-    "message": "1.修复网页端“传送后自动安装APK”不起作用：改用原始文件名判断APK类型，并用FileProvider安装（高版本Android必须content:// URI才能安装）。\n2.在线更新“马上更新”安装同样修复。"
+    "versionCode": 22,
+    "versionName": "2.1.2",
+    "installAPK": "https://raw.githubusercontent.com/abai569/TVRemoteIME/master/released/IMEService-2.1.2.apk",
+    "message": "1.修复更新弹窗按钮遥控器无法聚焦：弹窗改为自定义布局+标准按钮，按钮聚焦时亮黄色，弹窗出现即选中第一个按钮，方向键可切换，确定键可操作。\n2.主界面“检查更新”按钮样式与下方“设置”按钮统一（同款描边圆角按钮），深蓝卡片上显示为白色描边，聚焦时亮黄色。"
 }

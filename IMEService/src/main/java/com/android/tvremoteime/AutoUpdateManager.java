@@ -1,14 +1,18 @@
 package com.android.tvremoteime;
 
-import android.app.AlertDialog;
+import android.app.Activity;
+import android.app.Dialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.Handler;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.View;
+import android.view.Window;
 import android.view.WindowManager;
+import android.widget.Button;
+import android.widget.TextView;
 
 import com.android.tvremoteime.http.HTTPGet;
 
@@ -130,41 +134,7 @@ public class AutoUpdateManager {
                         }
                         final String content = msg.toString();
                         final boolean forced = versionObj.has("forced") && versionObj.getBoolean("forced");
-
-                        handler.post(new Runnable() {
-                            @Override
-                            public void run() {
-                                AlertDialog.Builder builder = new AlertDialog.Builder(context);
-                                builder.setTitle(context.getString(R.string.app_name) + "版本更新提示").setIcon(R.drawable.ic_launcher);
-                                builder.setMessage(content);
-                                if (!forced) {
-                                    builder.setPositiveButton("稍后更新", new DialogInterface.OnClickListener() {
-                                        @Override
-                                        public void onClick(DialogInterface dialog, int which) {
-                                            dialog.dismiss();
-                                        }
-                                    });
-                                }
-                                builder.setNegativeButton("马上更新", new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        AppPackagesHelper.installPackage(localFile, context);
-                                        dialog.dismiss();
-                                    }
-                                });
-                                try {
-                                    AlertDialog dialog = builder.create();
-                                    dialog.setCanceledOnTouchOutside(false);
-                                    if(!(context instanceof android.app.Activity)){
-                                        // 非 Activity context（如 IME 服务）需要系统悬浮窗类型，TV ROM 未授权时会失败
-                                        dialog.getWindow().setType(WindowManager.LayoutParams.TYPE_SYSTEM_ALERT);
-                                    }
-                                    dialog.show();
-                                } catch (Exception ex) {
-                                    AppPackagesHelper.installPackage(localFile, context);
-                                }
-                            }
-                        });
+                        showUpdateDialog(context.getString(R.string.app_name) + "版本更新提示", content, !forced, true);
                     } else {
                         showDialog("更新检查失败", "新版本下载失败，已依次尝试以下地址：\r\n" + join(errors));
                     }
@@ -177,29 +147,70 @@ public class AutoUpdateManager {
         thread.start();
     }
 
+    /** 纯提示弹窗（只显示“知道了”按钮，TV 遥控器可聚焦） */
     private void showDialog(final String title, final String reasons){
+        showUpdateDialog(title, reasons, false, false);
+    }
+
+    /**
+     * 自定义更新弹窗：标准 Button + 黄色焦点，TV 遥控器可正常选中
+     * @param showLater    是否显示“稍后更新”按钮（false 时只显示“知道了”）
+     * @param installOnNow 点“马上更新”是否安装（仅新版本弹窗为 true）
+     */
+    private void showUpdateDialog(final String title, final String message, final boolean showLater, final boolean installOnNow){
         handler.post(new Runnable() {
             @Override
             public void run() {
                 try {
-                    AlertDialog.Builder builder = new AlertDialog.Builder(context);
-                    builder.setTitle(title);
-                    builder.setMessage(reasons);
-                    builder.setPositiveButton("知道了", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            dialog.dismiss();
-                        }
-                    });
-                    AlertDialog dialog = builder.create();
+                    final Dialog dialog = new Dialog(context);
+                    dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                    dialog.setContentView(R.layout.dialog_update);
                     dialog.setCanceledOnTouchOutside(false);
-                    if(!(context instanceof android.app.Activity)){
+                    if(!(context instanceof Activity)){
                         // 非 Activity context（如 IME 服务）需要系统悬浮窗类型，TV ROM 未授权时会失败
                         dialog.getWindow().setType(WindowManager.LayoutParams.TYPE_SYSTEM_ALERT);
                     }
+                    ((TextView) dialog.findViewById(R.id.dlgTitle)).setText(title);
+                    ((TextView) dialog.findViewById(R.id.dlgMessage)).setText(message);
+
+                    Button btnLater = dialog.findViewById(R.id.btnDialogLater);
+                    Button btnNow = dialog.findViewById(R.id.btnDialogNow);
+                    Button btnOk = dialog.findViewById(R.id.btnDialogOk);
+
+                    View firstFocus;
+                    if(showLater){
+                        btnLater.setVisibility(View.VISIBLE);
+                        btnNow.setVisibility(View.VISIBLE);
+                        btnOk.setVisibility(View.GONE);
+                        btnLater.setOnClickListener(new View.OnClickListener() {
+                            @Override public void onClick(View v) { dialog.dismiss(); }
+                        });
+                        btnNow.setOnClickListener(new View.OnClickListener() {
+                            @Override public void onClick(View v) {
+                                dialog.dismiss();
+                                AppPackagesHelper.installPackage(localFile, context);
+                            }
+                        });
+                        firstFocus = btnLater;
+                    } else {
+                        btnLater.setVisibility(View.GONE);
+                        btnNow.setVisibility(View.GONE);
+                        btnOk.setVisibility(View.VISIBLE);
+                        btnOk.setOnClickListener(new View.OnClickListener() {
+                            @Override public void onClick(View v) { dialog.dismiss(); }
+                        });
+                        firstFocus = btnOk;
+                    }
                     dialog.show();
+                    // TV 遥控器初始焦点落到按钮上，方向键可切换
+                    if(firstFocus != null){
+                        firstFocus.requestFocus();
+                    }
                 } catch (Exception ex) {
-                    Log.e(TAG, "showDialog", ex);
+                    Log.e(TAG, "showUpdateDialog", ex);
+                    if(installOnNow){
+                        AppPackagesHelper.installPackage(localFile, context);
+                    }
                 }
             }
         });

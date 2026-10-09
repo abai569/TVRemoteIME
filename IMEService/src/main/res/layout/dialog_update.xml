@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="560dp"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:background="@drawable/dialog_bg"
+    android:padding="24dp">
+
+    <TextView
+        android:id="@+id/dlgTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="22sp"
+        android:textStyle="bold"
+        android:textColor="#1A1A1A" />
+
+    <TextView
+        android:id="@+id/dlgMessage"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:textSize="16sp"
+        android:textColor="#333333"
+        android:maxHeight="320dp"
+        android:scrollbars="vertical" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:orientation="horizontal"
+        android:gravity="end">
+
+        <Button
+            android:id="@+id/btnDialogLater"
+            android:layout_width="170dp"
+            android:layout_height="52dp"
+            android:text="稍后更新"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:textColor="#1A1A1A"
+            android:background="@drawable/dialog_btn_focus"
+            android:focusable="true" />
+
+        <Button
+            android:id="@+id/btnDialogNow"
+            android:layout_width="170dp"
+            android:layout_height="52dp"
+            android:layout_marginStart="16dp"
+            android:text="马上更新"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:textColor="#1A1A1A"
+            android:background="@drawable/dialog_btn_focus"
+            android:focusable="true" />
+
+        <Button
+            android:id="@+id/btnDialogOk"
+            android:layout_width="170dp"
+            android:layout_height="52dp"
+            android:text="知道了"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:textColor="#1A1A1A"
+            android:background="@drawable/dialog_btn_focus"
+            android:focusable="true"
+            android:visibility="gone" />
+
+    </LinearLayout>
+</LinearLayout>

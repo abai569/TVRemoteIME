@@ -8,6 +8,11 @@
 
 ## 更新日志（Fork 版本）
 
+### 2026-10 更新（v2.1.2）
+
+- 修复更新弹窗按钮遥控器无法聚焦：弹窗改为自定义布局 + 标准按钮，聚焦时亮黄色，弹窗出现即选中第一个按钮，方向键可切换、确定键可操作
+- 主界面“检查更新”按钮样式与下方“设置”按钮统一（同款描边圆角按钮）
+
 ### 2026-10 更新（v2.1.1）
 
 - 修复网页端“传送后自动安装APK”不起作用：改用原始文件名判断 APK 类型，并改用 FileProvider 安装（Android 7.0+ 必须 content:// URI，之前的 file:// 方式被系统拦截）
@@ -122,7 +127,7 @@
 
 # 安装方法
 
-下载最新版本的APK包：https://github.com/abai569/TVRemoteIME/raw/master/released/IMEService-2.1.1.apk
+下载最新版本的APK包：https://github.com/abai569/TVRemoteIME/raw/master/released/IMEService-2.1.2.apk
 
 ## 一、通过adb命令安装应用  
 

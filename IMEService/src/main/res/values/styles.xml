@@ -118,6 +118,20 @@
         <item name="android:minHeight">48dp</item>
     </style>
 
+    <!-- Header 上的检查更新按钮：与 SecondaryButton 同款（outline/圆角8/48高），
+         因位于深蓝标题卡片上，描边和文字用白色；聚焦时黄底深字（TV 遥控器可见） -->
+    <style name="CheckUpdateButton" parent="Widget.MaterialComponents.Button.OutlinedButton">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="strokeColor">@color/btn_header_stroke</item>
+        <item name="android:textColor">@color/btn_header_text</item>
+        <item name="backgroundTint">@color/btn_check_update_bg</item>
+        <item name="cornerRadius">8dp</item>
+        <item name="android:paddingStart">24dp</item>
+        <item name="android:paddingEnd">24dp</item>
+        <item name="android:minHeight">48dp</item>
+    </style>
+
     <!-- Text input style -->
     <style name="TextInputStyle" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
         <item name="android:layout_width">match_parent</item>

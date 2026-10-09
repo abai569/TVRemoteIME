@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
-    <!-- 聚焦时文字用深色，与黄色背景对比；默认用主题主色 -->
+    <!-- 聚焦时背景已变黄，描边用深色区分；默认在深蓝 header 上用白色描边 -->
     <item android:state_focused="true" android:color="#1A1A1A" />
-    <item android:color="@color/md_theme_primary" />
+    <item android:color="#FFFFFF" />
 </selector>
