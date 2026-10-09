@@ -8,11 +8,11 @@
 
 ## 更新日志（Fork 版本）
 
-### 2026-10 更新（v2.2.5）
+### 2026-10 更新（v2.2.6）
 
 - 二维码加大到 220dp，并裁剪掉 zxing 白边使二维码图形与标题左对齐
 
-### 2026-10 更新（v2.2.5）
+### 2026-10 更新（v2.2.6）
 
 - 在线更新重构：直接拉取 GitHub 最新 Release（不再依赖 released/version.json，彻底解决版本号漂移 404/跳版本问题）
 - 修复 versionCode 倒退导致电视覆盖安装失败（2.2.x 高于 2.1.x，旧公式在 2.2.x 上反而变小）
@@ -163,7 +163,7 @@
 
 # 安装方法
 
-下载最新版本的APK包：https://github.com/abai569/TVRemoteIME/raw/master/released/IMEService-2.2.5.apk
+下载最新版本的APK包：https://github.com/abai569/TVRemoteIME/raw/master/released/IMEService-2.2.6.apk
 
 ## 一、通过adb命令安装应用  
 

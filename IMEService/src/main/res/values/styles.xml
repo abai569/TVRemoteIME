@@ -139,6 +139,7 @@
         <item name="boxStrokeColor">@color/md_theme_primary</item>
         <item name="hintTextColor">@color/md_theme_primary</item>
         <item name="android:textColorHint">@color/md_theme_secondary</item>
+        <item name="hintEnabled">false</item>
     </style>
 
     <!-- Section title style -->
