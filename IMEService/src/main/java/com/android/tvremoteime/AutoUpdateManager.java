@@ -16,6 +16,7 @@ import android.widget.TextView;
 
 import com.android.tvremoteime.http.HTTPGet;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -32,8 +33,8 @@ public class AutoUpdateManager {
     private Handler handler;
     private File localFile = null;
 
-    /** 版本信息清单：本仓库 released/version.json（直连地址，代理会自动拼接前缀） */
-    private static String VERSION_FILE_URL = "https://raw.githubusercontent.com/abai569/TVRemoteIME/master/released/version.json";
+    /** GitHub 最新 Release API（直连地址，代理会自动拼接前缀）；在线更新直接拉最新 Release，不再依赖 version.json */
+    private static String GITHUB_API_URL = "https://api.github.com/repos/abai569/TVRemoteIME/releases/latest";
     /** GitHub 加速代理列表（按顺序尝试，全部失败后走直连） */
     private static final String[] PROXIES = {
             "https://git-proxy.abai.eu.org",
@@ -87,16 +88,16 @@ public class AutoUpdateManager {
     private String checkSync(){
         try{
             List<String> errors = new ArrayList<String>();
-            JSONObject versionObj = getServerVersionObj(errors);
-            if(versionObj == null){
+            JSONObject release = getLatestRelease(errors);
+            if(release == null){
                 return "获取版本信息失败，已依次尝试以下地址：\r\n" + join(errors);
             }
-            if(!needUpdate(versionObj)){
+            String tagName = release.optString("tag_name", "");
+            if(!needUpdate(tagName)){
                 return "当前已是最新版本：" + AppPackagesHelper.getCurrentPackageVersion(context);
             }
-            if(downloadInstallAPK(versionObj, errors)){
-                String versionName = versionObj.has("versionName") ? versionObj.getString("versionName") : "新版本";
-                return "发现新版本 " + versionName + "，已在电视端弹出更新提示";
+            if(downloadInstallAPK(release, errors)){
+                return "发现新版本 " + tagName + "，已在电视端弹出更新提示";
             } else {
                 return "新版本下载失败，已依次尝试以下地址：\r\n" + join(errors);
             }
@@ -112,29 +113,28 @@ public class AutoUpdateManager {
             public void run() {
                 try{
                     List<String> errors = new ArrayList<String>();
-                    JSONObject versionObj = getServerVersionObj(errors);
-                    if(versionObj == null){
+                    JSONObject release = getLatestRelease(errors);
+                    if(release == null){
                         showDialog("更新检查失败", "获取版本信息失败，已依次尝试以下地址：\r\n" + join(errors));
                         return;
                     }
-                    if(!needUpdate(versionObj)){
+                    String tagName = release.optString("tag_name", "");
+                    if(!needUpdate(tagName)){
                         if(manual){
                             String versionName = AppPackagesHelper.getCurrentPackageVersion(context);
                             showDialog("更新检查", "当前已是最新版本：" + versionName);
                         }
                         return;
                     }
-                    if(downloadInstallAPK(versionObj, errors)){
-                        String message = versionObj.has("message") ? versionObj.getString("message") : "";
-                        String versionName = versionObj.has("versionName") ? versionObj.getString("versionName") : AppPackagesHelper.getCurrentPackageVersion(context);
+                    if(downloadInstallAPK(release, errors)){
+                        String message = release.optString("body", "");
                         StringBuilder msg = new StringBuilder();
-                        msg.append("发现新版本：").append(versionName);
+                        msg.append("发现新版本：").append(tagName);
                         if(!TextUtils.isEmpty(message)){
                             msg.append("\r\n更新内容：\r\n\r\n").append(message);
                         }
                         final String content = msg.toString();
-                        final boolean forced = versionObj.has("forced") && versionObj.getBoolean("forced");
-                        showUpdateDialog(context.getString(R.string.app_name) + "版本更新提示", content, !forced, true);
+                        showUpdateDialog(context.getString(R.string.app_name) + "版本更新提示", content, true, true);
                     } else {
                         showDialog("更新检查失败", "新版本下载失败，已依次尝试以下地址：\r\n" + join(errors));
                     }
@@ -225,22 +225,18 @@ public class AutoUpdateManager {
         return sb.toString();
     }
 
-    private int getCurrentPackageVersion(){
-        try {
-            PackageInfo packageInfo = context.getPackageManager().getPackageInfo(context.getPackageName(), 0);
-            return packageInfo.versionCode;
-        }catch (PackageManager.NameNotFoundException e){}
-        return -1;
-    }
-
-    /** 依次尝试 3 个代理 + 直连 获取版本信息，记录每个地址的失败原因 */
-    private JSONObject getServerVersionObj(List<String> errors){
+    /** 依次尝试 3 个代理 + 直连 获取 GitHub 最新 Release 信息，记录每个地址的失败原因 */
+    private JSONObject getLatestRelease(List<String> errors){
         for(String proxy : PROXIES){
-            String url = proxy + "/" + VERSION_FILE_URL;
+            String url = proxy + "/" + GITHUB_API_URL;
             String[] res = HTTPGet.readStringWithError(url);
             if(res[0] != null){
                 try {
-                    return new JSONObject(res[0]);
+                    JSONObject obj = new JSONObject(res[0]);
+                    if(!TextUtils.isEmpty(obj.optString("tag_name", ""))){
+                        return obj;
+                    }
+                    errors.add(url + " → Release信息缺少 tag_name");
                 } catch (JSONException e) {
                     errors.add(url + " → JSON解析失败: " + e.getMessage());
                 }
@@ -248,42 +244,88 @@ public class AutoUpdateManager {
                 errors.add(url + " → " + res[1]);
             }
         }
-        String[] res = HTTPGet.readStringWithError(VERSION_FILE_URL);
+        String[] res = HTTPGet.readStringWithError(GITHUB_API_URL);
         if(res[0] != null){
             try {
-                return new JSONObject(res[0]);
+                JSONObject obj = new JSONObject(res[0]);
+                if(!TextUtils.isEmpty(obj.optString("tag_name", ""))){
+                    return obj;
+                }
+                errors.add(GITHUB_API_URL + " → Release信息缺少 tag_name");
             } catch (JSONException e) {
-                errors.add(VERSION_FILE_URL + " → JSON解析失败: " + e.getMessage());
+                errors.add(GITHUB_API_URL + " → JSON解析失败: " + e.getMessage());
             }
         } else {
-            errors.add(VERSION_FILE_URL + " → " + res[1]);
+            errors.add(GITHUB_API_URL + " → " + res[1]);
         }
         return null;
     }
 
-    private boolean needUpdate(JSONObject versionObj){
-        int version = getCurrentPackageVersion();
-        if(version == -1 || versionObj == null) return false;
-
+    /** 从 Release 信息中取 APK 下载地址（assets 里的 IMEService-*.apk） */
+    private String getApkUrl(JSONObject release){
         try {
-            return (versionObj.has("versionCode") &&
-                     versionObj.has("installAPK") &&
-                     version < versionObj.getInt("versionCode"));
-        } catch (JSONException e) {
-            return false;
+            JSONArray assets = release.optJSONArray("assets");
+            if(assets != null){
+                for(int i = 0; i < assets.length(); i++){
+                    JSONObject asset = assets.getJSONObject(i);
+                    String name = asset.optString("name", "");
+                    if(name.startsWith("IMEService-") && name.endsWith(".apk")){
+                        return asset.optString("browser_download_url", "");
+                    }
+                }
+            }
+            // 兜底：GitHub 直链 latest/download/IMEService-<tag>.apk
+            String tag = release.optString("tag_name", "");
+            if(!TextUtils.isEmpty(tag)){
+                return "https://github.com/abai569/TVRemoteIME/releases/latest/download/IMEService-" + tag + ".apk";
+            }
+        }catch (JSONException e){
+            Log.e(TAG, "getApkUrl", e);
+        }
+        return "";
+    }
+
+    /** 语义化版本比较：remote（如 2.2.2）是否比 local（如 2.1.9）新 */
+    private static boolean isNewerVersion(String remote, String local){
+        int[] r = parseVersion(remote);
+        int[] l = parseVersion(local);
+        if(r == null || l == null) return false;
+        for(int i = 0; i < 3; i++){
+            if(r[i] > l[i]) return true;
+            if(r[i] < l[i]) return false;
+        }
+        return false;
+    }
+
+    private static int[] parseVersion(String v){
+        try {
+            if(TextUtils.isEmpty(v)) return null;
+            String[] parts = v.trim().replaceFirst("^[vV]", "").split("\\.");
+            int[] nums = new int[3];
+            for(int i = 0; i < 3; i++){
+                nums[i] = i < parts.length ? Integer.parseInt(parts[i].trim()) : 0;
+            }
+            return nums;
+        }catch (Exception e){
+            return null;
         }
     }
 
-    private boolean needDownloadAPK(JSONObject versionObj) {
+    private boolean needUpdate(String remoteTag){
+        if(TextUtils.isEmpty(remoteTag)) return false;
+        String localVersionName = AppPackagesHelper.getCurrentPackageVersion(context);
+        return isNewerVersion(remoteTag, localVersionName);
+    }
+
+    private boolean needDownloadAPK(String targetVersionName) {
         try {
-            if(! this.localFile.exists()) return true;
+            if(!this.localFile.exists()) return true;
 
             PackageManager pm = context.getPackageManager();
             PackageInfo packInfo = pm.getPackageArchiveInfo(this.localFile.getAbsolutePath(), PackageManager.GET_ACTIVITIES);
-            int localVersion = packInfo.versionCode;
+            String localVersion = packInfo.versionName;
             if(Environment.needDebug) Environment.debug(TAG, "needDownloadAPK: localVersion = " + localVersion);
-            int version = versionObj.getInt("versionCode");
-            return localVersion < version;
+            return !targetVersionName.equals(localVersion);
         }catch (Exception e){
             return true;
         }
@@ -301,16 +343,17 @@ public class AutoUpdateManager {
         }
     }
 
-    /** 依次尝试 3 个代理 + 直连 下载 APK，记录每个地址的失败原因 */
-    private boolean downloadInstallAPK(JSONObject versionObj, List<String> errors){
+    /** 依次尝试 3 个代理 + 直连 下载 Release 的 APK，记录每个地址的失败原因 */
+    private boolean downloadInstallAPK(JSONObject release, List<String> errors){
         try {
-            if(!needDownloadAPK(versionObj)){
+            String tagName = release.optString("tag_name", "");
+            if(!needDownloadAPK(tagName)){
                 return true;
             }
 
-            String url = versionObj.getString("installAPK");
+            String url = getApkUrl(release);
             if(TextUtils.isEmpty(url)) {
-                errors.add("version.json 中缺少 installAPK 下载地址");
+                errors.add("Release 中找不到 APK 下载地址");
                 return false;
             }
             if(Environment.needDebug) Environment.debug(TAG, "downloadInstallAPK starting: " + url);
