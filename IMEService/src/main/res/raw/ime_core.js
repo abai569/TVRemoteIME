@@ -410,6 +410,21 @@ $("#btnClear").on("click", function() {
 		})
 	}
 })
+$("#controlPanelToggle").on("click", function() {
+	$(this).closest(".control-panel").toggleClass("collapsed");
+});
+$("#btnUpload").on("click", function(e) {
+	e.preventDefault();
+	$(this).closest(".upload-wrapper").find("input[type=file]").click();
+});
+$("#btnUpload2").on("click", function(e) {
+	e.preventDefault();
+	$("#upfile2").click();
+});
+$("#btnUploadTorrent").on("click", function(e) {
+	e.preventDefault();
+	$("#upfile3").click();
+});
 $("#upfile,#upfile2,#upfile3").change(function() {
 	var id = this.id;
 	var formData = new FormData;
@@ -500,19 +515,32 @@ function loadTorrentItems(){
 	});
 }
 
-var upgradeScript = null;
-
 function upgrade() {
 	$.get('/version', function(version){
 		$('#curVer').html(version);
 	});
-	if(null != upgradeScript){
-		document.body.removeChild(upgradeScript);
-	}
-	var upgradeScript = document.createElement("script");
-	upgradeScript.type = "text/javascript";
-	upgradeScript.src = "http://tvremoteime-1255402058.cos.ap-guangzhou.myqcloud.com/upgrade.js";
-	document.body.appendChild(upgradeScript);
+	// 自动获取本项目（GitHub）最新版本号
+	$.getJSON('https://api.github.com/repos/abai569/TVRemoteIME/tags', function(tags) {
+		if(tags && tags.length){
+			var best = null, bestVer = null;
+			for(var i = 0; i < tags.length; i++){
+				var name = tags[i].name || '';
+				var m = name.match(/^v?(\d+)\.(\d+)\.(\d+)/);
+				if(!m) continue;
+				var ver = [parseInt(m[1]), parseInt(m[2]), parseInt(m[3])];
+				if(!bestVer || ver[0] > bestVer[0] || (ver[0] == bestVer[0] && (ver[1] > bestVer[1] || (ver[1] == bestVer[1] && ver[2] > bestVer[2])))){
+					best = tags[i];
+					bestVer = ver;
+				}
+			}
+			if(best){
+				$('#newVer').html(best.name.replace(/^v/i, ''));
+				$('#newVerUrl').attr('href', 'https://github.com/abai569/TVRemoteIME/releases/tag/' + best.name);
+			}
+		}
+	}).fail(function() {
+		// 获取失败时保留页面默认显示的最新版本号
+	});
 }
 reloadAppList();
 loadFileList("");
@@ -792,4 +820,6 @@ $(document).ready(function() {
 	// 定期检查 ADB 状态
 	checkAdbStatus();
 	setInterval(checkAdbStatus, 10000);
+	// 打开页面时光标默认进入文字输入框
+	$("#inputarea").focus();
 });

@@ -8,6 +8,15 @@
 
 ## 更新日志（Fork 版本）
 
+### 2026-10 更新（v2.0.3 重新构建）
+
+- 修复网页控制端“传送文件”按钮点击无响应的问题（原代码未绑定点击事件）
+- 收紧“传送文件”按钮与上方内容的间距，优化移动端布局
+- 遥控器按键面板默认折叠收起，退格/清空按钮右对齐，去掉折叠标题下的分割线
+- 打开控制页面时光标自动聚焦到输入框
+- 顶部版本号改为自动从本仓库获取最新版本（当前版本 2.0.3 / 最新版本 2.0.3）
+- APK 内部版本号更新为 2.0.3（versionCode 13）
+
 ### 2026-01 更新
 
 #### 新增功能：触控板/鼠标控制（基于辅助功能服务）
@@ -61,7 +70,7 @@
 
 # 安装方法
 
-下载最新版本的APK包：https://github.com/kingthy/TVRemoteIME/raw/master/released/IMEService-release.apk
+下载最新版本的APK包：https://github.com/abai569/TVRemoteIME/raw/master/released/IMEService-release.apk
 
 ## 一、通过adb命令安装应用  
 

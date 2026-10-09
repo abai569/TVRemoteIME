@@ -251,9 +251,46 @@ body {
 .control-panel {
 	background: var(--color-surface);
 	border-radius: var(--radius-lg);
-	padding: var(--spacing-xl);
+	padding: var(--spacing-md);
 	margin-bottom: var(--spacing-lg);
 	box-shadow: var(--shadow-sm);
+}
+
+.control-panel-header {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	cursor: pointer;
+	user-select: none;
+	-webkit-tap-highlight-color: transparent;
+	padding-bottom: var(--spacing-sm);
+	font-size: var(--font-size-sm);
+	font-weight: 600;
+	color: var(--color-text-secondary);
+	transition: color var(--transition-fast);
+}
+
+.control-panel-header:hover {
+	color: var(--color-primary);
+}
+
+.control-panel-arrow {
+	font-size: var(--font-size-xs);
+	transition: transform var(--transition-normal);
+}
+
+.control-panel.collapsed .direction-btns {
+	display: none;
+}
+
+.control-panel.collapsed {
+	padding-top: var(--spacing-sm);
+	padding-bottom: var(--spacing-sm);
+	margin-bottom: var(--spacing-sm);
+}
+
+.control-panel.collapsed .control-panel-arrow {
+	transform: rotate(180deg);
 }
 
 .direction-btns {
@@ -384,7 +421,7 @@ body {
 	background: var(--color-surface);
 	border-radius: var(--radius-lg);
 	padding: var(--spacing-md);
-	margin-bottom: var(--spacing-lg);
+	margin-bottom: var(--spacing-sm);
 	box-shadow: var(--shadow-sm);
 }
 
@@ -442,6 +479,7 @@ body {
 
 .action-buttons {
 	display: flex;
+	justify-content: flex-end;
 	gap: var(--spacing-sm);
 }
 
@@ -524,14 +562,11 @@ body {
 #upfile,
 #upfile2,
 #upfile3 {
-	width: 80px;
-	height: 36px;
-	position: relative;
-	opacity: 0;
-	cursor: pointer;
+	display: none;
 }
 
 .upload-btn {
+	position: static;
 	padding: 10px 20px;
 	background: var(--color-primary);
 	color: white;
@@ -1289,13 +1324,6 @@ body {
 	.upload-wrapper {
 		flex-direction: column;
 		align-items: stretch;
-	}
-
-	#upfile,
-	#upfile2,
-	#upfile3 {
-		width: 100%;
-		height: 40px;
 	}
 
 	.progress-bar {

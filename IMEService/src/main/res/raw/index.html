@@ -15,9 +15,9 @@
 			<div class="header-content">
 				<h1 class="app-title">📺 小盒精灵</h1>
 				<div class="version-info">
-					<span>当前版本：<span class="version-code" id="curVer">2.0.0</span></span>
-					<a href="#" target="_blank" id="newVerUrl" class="update-link" style="display:none;">
-						<span>最新版本：<span class="version-code" id="newVer">2.0.0</span></span>
+					<span>当前版本：<span class="version-code" id="curVer">2.0.3</span></span>
+					<a href="#" target="_blank" id="newVerUrl" class="update-link">
+						<span>最新版本：<span class="version-code" id="newVer">2.0.3</span></span>
 					</a>
 				</div>
 			</div>
@@ -50,7 +50,11 @@
 		<!-- Tab Content: Controls -->
 		<div class="tab-content" data-tab="controls">
 			<!-- Remote Control Panel -->
-			<section class="control-panel">
+			<section class="control-panel collapsed">
+				<div class="control-panel-header" id="controlPanelToggle" role="button" aria-label="展开或折叠遥控器按键">
+					<span class="control-panel-title">遥控器按键</span>
+					<span class="control-panel-arrow">▲</span>
+				</div>
 				<div id="direction-btns" class="direction-btns">
 					<div class="control-btn home-btn" id="home-btn" data-key='3' data-bp='-586px -315px' aria-label="Home"></div>
 					<div class="control-btn vol-btn" id="vol-btn" data-key='164' data-bp='-711px -315px' aria-label="Volume"></div>
