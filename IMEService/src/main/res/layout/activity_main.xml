@@ -132,14 +132,13 @@
 
                         </LinearLayout>
 
-                        <!-- 右：测试远程输入（居右） -->
+                        <!-- 右：测试远程输入（与输入框左对齐） -->
                         <LinearLayout
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:layout_marginStart="16dp"
-                            android:orientation="vertical"
-                            android:gravity="end">
+                            android:orientation="vertical">
 
                             <TextView
                                 android:layout_width="wrap_content"

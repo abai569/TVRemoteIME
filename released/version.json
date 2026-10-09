@@ -1,6 +1,6 @@
 {
-    "versionCode": 31,
-    "versionName": "2.2.1",
-    "installAPK": "https://raw.githubusercontent.com/abai569/TVRemoteIME/master/released/IMEService-2.2.1.apk",
-    "message": "1.二维码与标题左侧对齐，间距与右卡“输入法设置→第一步”一致。\n2.二维码尺寸调整（180dp），高度与右卡“第一步→手动启动”区域一致。"
+    "versionCode": 32,
+    "versionName": "2.2.2",
+    "installAPK": "https://raw.githubusercontent.com/abai569/TVRemoteIME/master/released/IMEService-2.2.2.apk",
+    "message": "1.“测试远程输入：”标签与输入框左侧对齐（不再右侧对齐），网址同步左对齐。"
 }
