@@ -75,6 +75,19 @@ jobs:
         run: |
           gradle :IMEService:assembleRelease --no-daemon
 
+      - name: Commit APK to released/ (在线更新下载源)
+        env:
+          VERSION: ${{ steps.ver.outputs.name }}
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git rm -f --ignore-unmatch released/IMEService-*.apk >/dev/null 2>&1 || true
+          cp IMEService/build/outputs/apk/release/IMEService-release.apk "released/IMEService-$VERSION.apk"
+          git add released/
+          git commit -m "chore(release): 更新 released/IMEService-$VERSION.apk" || echo "no change to commit"
+          git push origin master
+
       - name: Publish GitHub Release
         env:
           GH_TOKEN: ${{ github.token }}
