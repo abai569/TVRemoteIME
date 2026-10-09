@@ -18,7 +18,17 @@ import javax.net.ssl.HttpsURLConnection;
  * Created by kingt on 2018/4/11.
  */
 public class HTTPGet {
+
+    /** 下载进度回调 */
+    public interface ProgressListener {
+        void onProgress(long downloaded, long total);
+    }
+
     public static String[] readStringWithError(String uri){
+        return readStringWithError(uri, 8000, 20000);
+    }
+
+    public static String[] readStringWithError(String uri, int connectTimeout, int readTimeout){
         HTTPSTrustManager.allowAllSSL();
         try {
             URL url = new URL(uri);
@@ -27,8 +37,8 @@ public class HTTPGet {
             conn.setRequestProperty("Accept", "text/html, application/xhtml+xml, image/jxr, */*");
             conn.setRequestProperty("Accept-Encoding", "identity");
             conn.setRequestProperty("User-Agent", "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.181 Safari/537.36");
-            conn.setConnectTimeout(8000);
-            conn.setReadTimeout(20000);
+            conn.setConnectTimeout(connectTimeout);
+            conn.setReadTimeout(readTimeout);
             int code = conn.getResponseCode();
             if (code == 200) {
                 BufferedReader reader = new BufferedReader(
@@ -60,6 +70,14 @@ public class HTTPGet {
     }
 
     public static String[] downloadFileWithError(String uri, File file){
+        return downloadFileWithError(uri, file, null, 8000, 20000);
+    }
+
+    public static String[] downloadFileWithError(String uri, File file, ProgressListener listener){
+        return downloadFileWithError(uri, file, listener, 8000, 20000);
+    }
+
+    public static String[] downloadFileWithError(String uri, File file, ProgressListener listener, int connectTimeout, int readTimeout){
         HTTPSTrustManager.allowAllSSL();
         try {
             URL url = new URL(uri);
@@ -68,8 +86,8 @@ public class HTTPGet {
             conn.setRequestProperty("Accept", "text/html, application/xhtml+xml, image/jxr, */*");
             conn.setRequestProperty("Accept-Encoding", "identity");
             conn.setRequestProperty("User-Agent", "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.181 Safari/537.36");
-            conn.setConnectTimeout(8000);
-            conn.setReadTimeout(20000);
+            conn.setConnectTimeout(connectTimeout);
+            conn.setReadTimeout(readTimeout);
 
             int code = conn.getResponseCode();
             if (code == 200) {
@@ -77,10 +95,15 @@ public class HTTPGet {
                 FileOutputStream fos = new FileOutputStream(file);
                 try {
                     byte[] tmp = new byte[4096];
+                    long total = conn.getContentLengthLong();
+                    if(total <= 0) total = -1;
+                    long done = 0;
 
                     int l;
                     while((l = instream.read(tmp)) != -1) {
                         fos.write(tmp, 0, l);
+                        done += l;
+                        if(listener != null) listener.onProgress(done, total);
                     }
                     return new String[]{"true", null};
                 } finally {

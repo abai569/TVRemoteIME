@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.android.tvremoteime.http.HTTPGet;
@@ -32,6 +33,8 @@ public class AutoUpdateManager {
     private Context context;
     private Handler handler;
     private File localFile = null;
+    /** 检查/下载进度弹窗（TV 端手动检查时显示，网页端 checkSync 不创建） */
+    private Dialog progressDialog = null;
 
     /** GitHub 最新 Release API（直连地址，代理会自动拼接前缀）；在线更新直接拉最新 Release，不再依赖 version.json */
     private static String GITHUB_API_URL = "https://api.github.com/repos/abai569/TVRemoteIME/releases/latest";
@@ -112,14 +115,20 @@ public class AutoUpdateManager {
             @Override
             public void run() {
                 try{
+                    // 点“检查更新”立即弹窗反馈，避免网络慢时看起来“没反应”
+                    if(manual){
+                        showProgressDialog("正在检查更新…", true);
+                    }
                     List<String> errors = new ArrayList<String>();
                     JSONObject release = getLatestRelease(errors);
                     if(release == null){
+                        dismissProgressDialog();
                         showDialog("更新检查失败", "获取版本信息失败，已依次尝试以下地址：\r\n" + join(errors));
                         return;
                     }
                     String tagName = release.optString("tag_name", "");
                     if(!needUpdate(tagName)){
+                        dismissProgressDialog();
                         if(manual){
                             String versionName = AppPackagesHelper.getCurrentPackageVersion(context);
                             showDialog("更新检查", "当前已是最新版本：" + versionName);
@@ -127,6 +136,7 @@ public class AutoUpdateManager {
                         return;
                     }
                     if(downloadInstallAPK(release, errors)){
+                        dismissProgressDialog();
                         String message = release.optString("body", "");
                         StringBuilder msg = new StringBuilder();
                         msg.append("发现新版本：").append(tagName);
@@ -136,15 +146,90 @@ public class AutoUpdateManager {
                         final String content = msg.toString();
                         showUpdateDialog(context.getString(R.string.app_name) + "版本更新提示", content, true, true);
                     } else {
+                        dismissProgressDialog();
                         showDialog("更新检查失败", "新版本下载失败，已依次尝试以下地址：\r\n" + join(errors));
                     }
                 }catch (Exception e){
                     Log.e(TAG, "startUpdateThread", e);
+                    dismissProgressDialog();
                     showDialog("更新检查失败", "更新检查异常：" + e.getClass().getSimpleName() + ": " + e.getMessage());
                 }
             }
         });
         thread.start();
+    }
+
+    /** 显示检查/下载进度弹窗（indeterminate=true 转圈表示“检查中”，false 为水平进度条+百分比） */
+    private void showProgressDialog(final String title, final boolean indeterminate){
+        handler.post(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    if(progressDialog != null){
+                        progressDialog.dismiss();
+                        progressDialog = null;
+                    }
+                    final Dialog dialog = new Dialog(context);
+                    dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                    dialog.setContentView(R.layout.dialog_progress);
+                    dialog.setCanceledOnTouchOutside(false);
+                    if(!(context instanceof Activity)){
+                        dialog.getWindow().setType(WindowManager.LayoutParams.TYPE_SYSTEM_ALERT);
+                    }
+                    ((TextView) dialog.findViewById(R.id.dlgProgressTitle)).setText(title);
+                    ProgressBar pb = dialog.findViewById(R.id.dlgProgressBar);
+                    TextView pct = dialog.findViewById(R.id.dlgProgressPercent);
+                    pb.setIndeterminate(indeterminate);
+                    if(indeterminate){
+                        pct.setVisibility(View.GONE);
+                    } else {
+                        pct.setVisibility(View.VISIBLE);
+                        pb.setProgress(0);
+                        pct.setText("0%");
+                    }
+                    dialog.show();
+                    progressDialog = dialog;
+                } catch (Exception ex) {
+                    Log.e(TAG, "showProgressDialog", ex);
+                }
+            }
+        });
+    }
+
+    /** 更新下载进度（仅进度弹窗存在时生效） */
+    private void updateProgress(final int pct){
+        if(progressDialog == null) return;
+        handler.post(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    if(progressDialog == null) return;
+                    ProgressBar pb = progressDialog.findViewById(R.id.dlgProgressBar);
+                    TextView tv = progressDialog.findViewById(R.id.dlgProgressPercent);
+                    pb.setProgress(pct);
+                    tv.setText(pct + "%");
+                } catch (Exception ex) {
+                    // 弹窗已关闭等情况忽略
+                }
+            }
+        });
+    }
+
+    /** 关闭进度弹窗 */
+    private void dismissProgressDialog(){
+        handler.post(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    if(progressDialog != null){
+                        progressDialog.dismiss();
+                    }
+                } catch (Exception ex) {
+                    // 忽略
+                }
+                progressDialog = null;
+            }
+        });
     }
 
     /** 纯提示弹窗（只显示“知道了”按钮，TV 遥控器可聚焦） */
@@ -225,26 +310,10 @@ public class AutoUpdateManager {
         return sb.toString();
     }
 
-    /** 依次尝试 3 个代理 + 直连 获取 GitHub 最新 Release 信息，记录每个地址的失败原因 */
+    /** 获取 GitHub 最新 Release 信息：直连优先（api.github.com 国内多数网络可直接访问且更快），失败再依次走 3 个代理，记录每个地址的失败原因 */
     private JSONObject getLatestRelease(List<String> errors){
-        for(String proxy : PROXIES){
-            String url = proxy + "/" + GITHUB_API_URL;
-            String[] res = HTTPGet.readStringWithError(url);
-            if(res[0] != null){
-                try {
-                    JSONObject obj = new JSONObject(res[0]);
-                    if(!TextUtils.isEmpty(obj.optString("tag_name", ""))){
-                        return obj;
-                    }
-                    errors.add(url + " → Release信息缺少 tag_name");
-                } catch (JSONException e) {
-                    errors.add(url + " → JSON解析失败: " + e.getMessage());
-                }
-            } else {
-                errors.add(url + " → " + res[1]);
-            }
-        }
-        String[] res = HTTPGet.readStringWithError(GITHUB_API_URL);
+        // 直连（短超时，快速失败）
+        String[] res = HTTPGet.readStringWithError(GITHUB_API_URL, 5000, 10000);
         if(res[0] != null){
             try {
                 JSONObject obj = new JSONObject(res[0]);
@@ -257,6 +326,24 @@ public class AutoUpdateManager {
             }
         } else {
             errors.add(GITHUB_API_URL + " → " + res[1]);
+        }
+        // 代理兜底
+        for(String proxy : PROXIES){
+            String url = proxy + "/" + GITHUB_API_URL;
+            String[] r = HTTPGet.readStringWithError(url, 5000, 10000);
+            if(r[0] != null){
+                try {
+                    JSONObject obj = new JSONObject(r[0]);
+                    if(!TextUtils.isEmpty(obj.optString("tag_name", ""))){
+                        return obj;
+                    }
+                    errors.add(url + " → Release信息缺少 tag_name");
+                } catch (JSONException e) {
+                    errors.add(url + " → JSON解析失败: " + e.getMessage());
+                }
+            } else {
+                errors.add(url + " → " + r[1]);
+            }
         }
         return null;
     }
@@ -343,7 +430,7 @@ public class AutoUpdateManager {
         }
     }
 
-    /** 依次尝试 3 个代理 + 直连 下载 Release 的 APK，记录每个地址的失败原因 */
+    /** 依次尝试 3 个代理 + 直连 下载 Release 的 APK（带下载进度回调），记录每个地址的失败原因 */
     private boolean downloadInstallAPK(JSONObject release, List<String> errors){
         try {
             String tagName = release.optString("tag_name", "");
@@ -356,10 +443,26 @@ public class AutoUpdateManager {
                 errors.add("Release 中找不到 APK 下载地址");
                 return false;
             }
+            // 下载阶段把“检查中”弹窗切换为水平进度条（网页端 checkSync 无弹窗，跳过）
+            if(progressDialog != null){
+                showProgressDialog("正在下载更新…", false);
+            }
             if(Environment.needDebug) Environment.debug(TAG, "downloadInstallAPK starting: " + url);
+            // 进度回调（按百分比去重，避免 UI 频繁刷新）
+            final int[] lastPct = { -1 };
+            HTTPGet.ProgressListener listener = new HTTPGet.ProgressListener() {
+                @Override
+                public void onProgress(long downloaded, long total) {
+                    int pct = total > 0 ? (int)(downloaded * 100 / total) : -1;
+                    if(pct >= 0 && pct != lastPct[0]){
+                        lastPct[0] = pct;
+                        updateProgress(pct);
+                    }
+                }
+            };
             for(String proxy : PROXIES){
                 String proxyUrl = proxy + "/" + url;
-                String[] res = HTTPGet.downloadFileWithError(proxyUrl, this.localFile);
+                String[] res = HTTPGet.downloadFileWithError(proxyUrl, this.localFile, listener, 5000, 10000);
                 if("true".equals(res[0])){
                     // 下载完成必须校验 APK 可解析：代理传输中断会得到半截文件，直接安装会报“未签名/解析失败”
                     if(isValidApk(this.localFile)){
@@ -371,7 +474,7 @@ public class AutoUpdateManager {
                 }
                 errors.add(proxyUrl + " → " + res[1]);
             }
-            String[] res = HTTPGet.downloadFileWithError(url, this.localFile);
+            String[] res = HTTPGet.downloadFileWithError(url, this.localFile, listener, 5000, 10000);
             if("true".equals(res[0]) && isValidApk(this.localFile)){
                 if(Environment.needDebug) Environment.debug(TAG, "downloadInstallAPK finished via " + url);
                 return true;
