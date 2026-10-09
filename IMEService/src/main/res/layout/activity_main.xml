@@ -394,6 +394,16 @@
 
             </com.google.android.material.card.MaterialCardView>
 
+            <!-- QQ 交流群（底部居中，小号字） -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="6dp"
+                android:gravity="center"
+                android:text="QQ交流群：1109483648"
+                android:textColor="#80606060"
+                android:textSize="12sp" />
+
         </LinearLayout>
 
     </LinearLayout>
