@@ -183,7 +183,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
             }
         }
         if (accessibilityButton != null) {
-            accessibilityButton.setText(isEnabled ? "已启用" : "去设置");
+            accessibilityButton.setText(isEnabled ? "已启用" : "设置");
         }
     }
 

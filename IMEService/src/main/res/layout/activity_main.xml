@@ -264,7 +264,7 @@
 
                                 <com.google.android.material.textfield.TextInputEditText
                                     android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
+                                    android:layout_height="48dp"
                                     android:hint="在此输入测试文字"
                                     android:maxLines="2" />
 
@@ -325,7 +325,7 @@
                             android:id="@+id/btnAccessibility"
                             style="@style/SecondaryButton"
                             android:layout_width="wrap_content"
-                            android:text="去设置" />
+                            android:text="设置" />
 
                     </LinearLayout>
 
@@ -378,7 +378,7 @@
                             <com.google.android.material.textfield.TextInputEditText
                                 android:id="@+id/etDLNAName"
                                 android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
+                                android:layout_height="48dp"
                                 android:hint="设备名称后缀（如：客厅、房间）"
                                 android:maxLines="1" />
 
