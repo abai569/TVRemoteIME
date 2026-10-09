@@ -15,16 +15,17 @@ The app runs an embedded HTTP server (NanoHTTPD on port 9978) that serves a web 
 
 ## Current Version
 
-- **versionCode**: 13
-- **versionName**: 2.0.3
+- **versionCode**: 14
+- **versionName**: 2.0.4
+- **signing**: release builds are signed with `keystore.properties` (storeFile `C:/Users/57064/app/tvremoteime-release.keystore`, gitignored)
 
 ## Build Commands
 
 ```bash
-# Build debug APK (signed, can be installed directly)
+# Build debug APK (signed with debug key, can be installed directly)
 ./gradlew assembleDebug
 
-# Build release APK (unsigned, requires signing before installation)
+# Build release APK (signed with release keystore, can be installed directly)
 ./gradlew assembleRelease
 
 # Clean build
