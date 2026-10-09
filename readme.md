@@ -8,6 +8,11 @@
 
 ## 更新日志（Fork 版本）
 
+### 2026-10 更新（v2.1.3）
+
+- 删除网页控制端顶部“检查更新”按钮（在线更新由电视端自动检查 + 主界面按钮触发）
+- 电视端主界面布局重排：输入法设置与 Web控制访问一左一右一行，触控板与 DLNA 一左一右一行；二维码加大并去除外框白边
+
 ### 2026-10 更新（v2.1.2）
 
 - 修复更新弹窗按钮遥控器无法聚焦：弹窗改为自定义布局 + 标准按钮，聚焦时亮黄色，弹窗出现即选中第一个按钮，方向键可切换、确定键可操作
@@ -127,7 +132,7 @@
 
 # 安装方法
 
-下载最新版本的APK包：https://github.com/abai569/TVRemoteIME/raw/master/released/IMEService-2.1.2.apk
+下载最新版本的APK包：https://github.com/abai569/TVRemoteIME/raw/master/released/IMEService-2.1.3.apk
 
 ## 一、通过adb命令安装应用  
 

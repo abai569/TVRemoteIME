@@ -176,7 +176,8 @@ public class MainActivity extends Activity implements View.OnClickListener {
     private void refreshQRCode(){
         String address = RemoteServer.getServerAddress(this);
         addressView.setText(address);
-        qrCodeImage.setImageBitmap(QRCodeGen.generateBitmap(address, 150, 150));
+        // 二维码加大显示后同步提高生成分辨率，保证清晰
+        qrCodeImage.setImageBitmap(QRCodeGen.generateBitmap(address, 480, 480));
     }
 
 

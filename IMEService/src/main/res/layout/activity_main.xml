@@ -16,7 +16,7 @@
         android:orientation="vertical"
         android:padding="16dp">
 
-        <!-- App Header -->
+        <!-- App Header（保留“检查更新”按钮） -->
         <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -84,309 +84,294 @@
 
         </com.google.android.material.card.MaterialCardView>
 
-        <!-- IME Setup Section -->
-        <com.google.android.material.card.MaterialCardView
+        <!-- Row 1: 输入法设置 | Web控制访问（一左一右） -->
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="16dp"
-            style="@style/CardStyle">
+            android:orientation="horizontal"
+            android:weightSum="2">
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:padding="8dp">
+            <!-- IME Setup -->
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:layout_marginEnd="8dp"
+                style="@style/CardStyle">
 
-                <TextView
-                    style="@style/SectionTitle"
-                    android:text="输入法设置" />
-
-                <!-- Step 1 -->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:gravity="center_vertical"
-                    android:layout_marginBottom="12dp">
+                    android:orientation="vertical"
+                    android:padding="8dp">
 
                     <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="@string/step1"
-                        style="@style/BodyText" />
+                        style="@style/SectionTitle"
+                        android:text="输入法设置" />
 
-                    <com.google.android.material.button.MaterialButton
-                        android:id="@+id/btnUseIME"
-                        style="@style/SecondaryButton"
-                        android:layout_width="wrap_content"
-                        android:text="设置" />
-
-                </LinearLayout>
-
-                <!-- Step 2 -->
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:gravity="center_vertical"
-                    android:layout_marginBottom="12dp">
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="@string/step2"
-                        style="@style/BodyText" />
-
-                    <com.google.android.material.button.MaterialButton
-                        android:id="@+id/btnSetIME"
-                        style="@style/SecondaryButton"
-                        android:layout_width="wrap_content"
-                        android:text="设置" />
-
-                </LinearLayout>
-
-                <!-- Manual Start -->
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:gravity="center_vertical"
-                    android:layout_marginBottom="12dp">
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="无法设置为默认？手动启动服务"
-                        style="@style/BodyText" />
-
-                    <com.google.android.material.button.MaterialButton
-                        android:id="@+id/btnStartService"
-                        style="@style/PrimaryButton"
-                        android:layout_width="wrap_content"
-                        android:text="手动启动" />
-
-                </LinearLayout>
-
-                <com.google.android.material.card.MaterialCardView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
-                    app:cardBackgroundColor="@color/md_theme_secondaryContainer"
-                    app:cardCornerRadius="8dp"
-                    app:cardElevation="0dp">
-
+                    <!-- Step 1 -->
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
-                        android:padding="12dp">
-
-                        <ImageView
-                            android:layout_width="20dp"
-                            android:layout_height="20dp"
-                            android:layout_marginEnd="8dp"
-                            android:src="@android:drawable/ic_dialog_info"
-                            app:tint="@color/md_theme_onSecondaryContainer" />
+                        android:gravity="center_vertical"
+                        android:layout_marginTop="12dp">
 
                         <TextView
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:text="手动启动后需开启ADB模式才能使用远程输入及遥控功能"
-                            android:textColor="@color/md_theme_onSecondaryContainer"
-                            android:textSize="13sp" />
+                            android:text="@string/step1"
+                            style="@style/BodyText" />
+
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/btnUseIME"
+                            style="@style/SecondaryButton"
+                            android:layout_width="wrap_content"
+                            android:text="设置" />
 
                     </LinearLayout>
 
-                </com.google.android.material.card.MaterialCardView>
+                    <!-- Step 2 -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical"
+                        android:layout_marginTop="12dp">
 
-            </LinearLayout>
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="@string/step2"
+                            style="@style/BodyText" />
 
-        </com.google.android.material.card.MaterialCardView>
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/btnSetIME"
+                            style="@style/SecondaryButton"
+                            android:layout_width="wrap_content"
+                            android:text="设置" />
 
-        <!-- Touchpad/Accessibility Section -->
-        <com.google.android.material.card.MaterialCardView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"
-            style="@style/CardStyle">
+                    </LinearLayout>
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:padding="8dp">
+                    <!-- Manual Start -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical"
+                        android:layout_marginTop="12dp">
 
-                <TextView
-                    style="@style/SectionTitle"
-                    android:text="触控板功能" />
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="无法设置为默认？手动启动服务"
+                            style="@style/BodyText" />
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:gravity="center_vertical">
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/btnStartService"
+                            style="@style/PrimaryButton"
+                            android:layout_width="wrap_content"
+                            android:text="手动启动" />
+
+                    </LinearLayout>
 
                     <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="启用辅助功能服务以使用触控板"
-                        style="@style/BodyText" />
-
-                    <com.google.android.material.button.MaterialButton
-                        android:id="@+id/btnAccessibility"
-                        style="@style/SecondaryButton"
                         android:layout_width="wrap_content"
-                        android:text="去设置" />
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="12dp"
+                        android:text="手动启动后需开启ADB模式才能使用远程输入及遥控功能"
+                        android:textColor="@color/md_theme_onSecondaryContainer"
+                        android:textSize="12sp" />
 
                 </LinearLayout>
 
-                <TextView
-                    android:id="@+id/tvAccessibilityStatus"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="12dp"
-                    android:text="未启用"
-                    android:textColor="@color/status_error"
-                    android:textSize="14sp"
-                    android:textStyle="bold" />
+            </com.google.android.material.card.MaterialCardView>
 
-            </LinearLayout>
-
-        </com.google.android.material.card.MaterialCardView>
-
-        <!-- Web Access Section -->
-        <com.google.android.material.card.MaterialCardView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"
-            style="@style/CardStyle">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:padding="8dp">
-
-                <TextView
-                    style="@style/SectionTitle"
-                    android:text="Web控制访问" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="手机或电脑扫描二维码或访问以下地址"
-                    style="@style/BodyText" />
+            <!-- Web Access（客户端输入，含二维码） -->
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:layout_marginStart="8dp"
+                style="@style/CardStyle">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:layout_marginTop="16dp"
-                    android:gravity="center">
+                    android:orientation="vertical"
+                    android:padding="8dp"
+                    android:gravity="center_horizontal">
+
+                    <TextView
+                        style="@style/SectionTitle"
+                        android:text="Web控制访问" />
 
                     <ImageView
                         android:id="@+id/ivQRCode"
-                        android:layout_width="180dp"
-                        android:layout_height="180dp"
-                        android:background="@color/md_theme_surfaceVariant"
-                        android:padding="8dp"
+                        android:layout_width="240dp"
+                        android:layout_height="240dp"
+                        android:layout_marginTop="12dp"
                         android:contentDescription="QR Code" />
 
                     <TextView
                         android:id="@+id/tvAddress"
-                        android:layout_width="0dp"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:layout_marginStart="16dp"
+                        android:layout_marginTop="12dp"
                         android:text="http://192.168.1.100:9978"
                         android:textColor="@color/md_theme_primary"
                         android:textSize="16sp"
                         android:textStyle="bold"
                         android:gravity="center" />
 
-                </LinearLayout>
+                    <!-- Test Input -->
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"
+                        android:text="测试远程输入："
+                        style="@style/BodyText" />
 
-                <!-- Test Input -->
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
-                    android:text="测试远程输入："
-                    style="@style/BodyText" />
-
-                <com.google.android.material.textfield.TextInputLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
-                    style="@style/TextInputStyle">
-
-                    <com.google.android.material.textfield.TextInputEditText
+                    <com.google.android.material.textfield.TextInputLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="在此输入测试文字"
-                        android:maxLines="2" />
+                        android:layout_marginTop="8dp"
+                        style="@style/TextInputStyle">
 
-                </com.google.android.material.textfield.TextInputLayout>
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="在此输入测试文字"
+                            android:maxLines="2" />
 
-            </LinearLayout>
+                    </com.google.android.material.textfield.TextInputLayout>
 
-        </com.google.android.material.card.MaterialCardView>
+                </LinearLayout>
 
-        <!-- DLNA Section -->
-        <com.google.android.material.card.MaterialCardView
+            </com.google.android.material.card.MaterialCardView>
+
+        </LinearLayout>
+
+        <!-- Row 2: 触控板 | DLNA（一左一右） -->
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="16dp"
-            style="@style/CardStyle">
+            android:orientation="horizontal"
+            android:weightSum="2">
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:padding="8dp">
-
-                <TextView
-                    style="@style/SectionTitle"
-                    android:text="DLNA投屏设置" />
+            <!-- Touchpad -->
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:layout_marginEnd="8dp"
+                style="@style/CardStyle">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:gravity="center_vertical">
+                    android:orientation="vertical"
+                    android:padding="8dp">
 
-                    <com.google.android.material.textfield.TextInputLayout
-                        android:layout_width="0dp"
+                    <TextView
+                        style="@style/SectionTitle"
+                        android:text="触控板功能" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:layout_marginEnd="8dp"
-                        style="@style/TextInputStyle">
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical"
+                        android:layout_marginTop="12dp">
 
-                        <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/etDLNAName"
-                            android:layout_width="match_parent"
+                        <TextView
+                            android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:hint="设备名称后缀（如：客厅、房间）"
-                            android:maxLines="1" />
+                            android:layout_weight="1"
+                            android:text="启用辅助功能服务以使用触控板"
+                            style="@style/BodyText" />
 
-                    </com.google.android.material.textfield.TextInputLayout>
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/btnAccessibility"
+                            style="@style/SecondaryButton"
+                            android:layout_width="wrap_content"
+                            android:text="去设置" />
 
-                    <com.google.android.material.button.MaterialButton
-                        android:id="@+id/btnSetDLNA"
-                        style="@style/PrimaryButton"
+                    </LinearLayout>
+
+                    <TextView
+                        android:id="@+id/tvAccessibilityStatus"
                         android:layout_width="wrap_content"
-                        android:text="设置" />
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="12dp"
+                        android:text="未启用"
+                        android:textColor="@color/status_error"
+                        android:textSize="14sp"
+                        android:textStyle="bold" />
 
                 </LinearLayout>
 
-            </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
 
-        </com.google.android.material.card.MaterialCardView>
+            <!-- DLNA -->
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:layout_marginStart="8dp"
+                style="@style/CardStyle">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="8dp">
+
+                    <TextView
+                        style="@style/SectionTitle"
+                        android:text="DLNA投屏设置" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical"
+                        android:layout_marginTop="12dp">
+
+                        <com.google.android.material.textfield.TextInputLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:layout_marginEnd="8dp"
+                            style="@style/TextInputStyle">
+
+                            <com.google.android.material.textfield.TextInputEditText
+                                android:id="@+id/etDLNAName"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:hint="设备名称后缀（如：客厅、房间）"
+                                android:maxLines="1" />
+
+                        </com.google.android.material.textfield.TextInputLayout>
+
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/btnSetDLNA"
+                            style="@style/PrimaryButton"
+                            android:layout_width="wrap_content"
+                            android:text="设置" />
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+            </com.google.android.material.card.MaterialCardView>
+
+        </LinearLayout>
 
     </LinearLayout>
 
