@@ -47,7 +47,7 @@ jobs:
       - name: Restore signing keystore from secrets
         run: |
           echo "${{ secrets.TVREMOTEIME_KEYSTORE_BASE64 }}" | base64 -d > "$RUNNER_TEMP/tvremoteime-release.keystore"
-          cat > keystore.properties <<'EOF'
+          cat > keystore.properties <<EOF
           storeFile=$RUNNER_TEMP/tvremoteime-release.keystore
           storePassword=${{ secrets.TVREMOTEIME_STORE_PASSWORD }}
           keyAlias=${{ secrets.TVREMOTEIME_KEY_ALIAS }}
