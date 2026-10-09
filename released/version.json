@@ -1,6 +1,6 @@
 {
-    "versionCode": 25,
-    "versionName": "2.1.5",
-    "installAPK": "https://raw.githubusercontent.com/abai569/TVRemoteIME/master/released/IMEService-2.1.5.apk",
-    "message": "1.新增网页端崩溃日志查看：手机浏览器访问 http://电视IP:9978/crashlog 可直接看到崩溃堆栈。\n2.二维码生成分辨率改回150，排除大尺寸生成的潜在兼容问题。\n3.仍保留：崩溃自动记录+下次启动弹窗显示+主界面兜底页。"
+    "versionCode": 26,
+    "versionName": "2.1.6",
+    "installAPK": "https://raw.githubusercontent.com/abai569/TVRemoteIME/master/released/IMEService-2.1.6.apk",
+    "message": "1.崩溃日志升级为全局：输入法服务、DLNA等后台组件崩溃也会记录，下次启动弹窗显示。\n2.DLNA（UPnP）启动加强防护，覆盖安装后旧进程端口残留不再带崩进程。\n3.网页端 /crashlog 可随时查看崩溃日志。"
 }

@@ -35,19 +35,25 @@ public class DLNAUtils {
         ServiceConnection serviceConnection = new ServiceConnection() {
             @Override
             public void onServiceConnected(ComponentName name, IBinder service) {
-                AndroidUpnpService upnpService = (AndroidUpnpService) service;
-                Log.i(TAG, "DLNA: onServiceConnected");
-                String dlnaName = context.getString(R.string.app_name);
-                String dlnaNameSuffix = getDLNANameSuffix(context);
-                if(!TextUtils.isEmpty(dlnaNameSuffix)) dlnaName += "(" + dlnaNameSuffix + ")";
-                if(mMediaRenderer != null){
-                    mMediaRenderer.stopAllMediaPlayers();
-                    upnpService.getRegistry().removeAllLocalDevices();
-                    mMediaRenderer = null;
+                try {
+                    AndroidUpnpService upnpService = (AndroidUpnpService) service;
+                    Log.i(TAG, "DLNA: onServiceConnected");
+                    String dlnaName = context.getString(R.string.app_name);
+                    String dlnaNameSuffix = getDLNANameSuffix(context);
+                    if(!TextUtils.isEmpty(dlnaNameSuffix)) dlnaName += "(" + dlnaNameSuffix + ")";
+                    if(mMediaRenderer != null){
+                        mMediaRenderer.stopAllMediaPlayers();
+                        upnpService.getRegistry().removeAllLocalDevices();
+                        mMediaRenderer = null;
+                    }
+                    mMediaRenderer = new ZxtMediaRenderer(1, dlnaName , context);
+                    upnpService.getRegistry().addDevice(mMediaRenderer.getDevice());
+                    Environment.toastInHandler(context, context.getString(R.string.app_name)  + " DLNA服务已启动");
+                } catch (Throwable t) {
+                    // DLNA（UPnP）在覆盖安装/端口残留等场景可能异常，不允许带崩进程
+                    Log.e(TAG, "DLNA onServiceConnected failed", t);
+                    CrashHandler.saveCrash(context, t);
                 }
-                mMediaRenderer = new ZxtMediaRenderer(1, dlnaName , context);
-                upnpService.getRegistry().addDevice(mMediaRenderer.getDevice());
-                Environment.toastInHandler(context, context.getString(R.string.app_name)  + " DLNA服务已启动");
             }
 
             @Override
