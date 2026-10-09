@@ -34,7 +34,24 @@ public class MainActivity extends Activity implements View.OnClickListener {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+
+        // 崩溃日志：任何未捕获异常先落盘，下次启动弹窗显示，杜绝闪退无从排查
+        CrashHandler.install(getApplicationContext());
+        showCrashReportIfExists();
+
+        try {
+            setContentView(R.layout.activity_main);
+        } catch (Throwable t) {
+            // 主界面布局加载失败：记录日志并显示兜底页，绝不反复闪退
+            Log.e("MainActivity", "inflate activity_main failed", t);
+            CrashHandler.saveCrash(this, t);
+            setContentView(R.layout.activity_fallback);
+            android.widget.TextView info = findViewById(R.id.tvFallbackInfo);
+            if (info != null) {
+                info.setText("主界面加载失败：" + t.getClass().getSimpleName() + "\n" + t.getMessage());
+            }
+            return;
+        }
 
         qrCodeImage = this.findViewById(R.id.ivQRCode);
         addressView = this.findViewById(R.id.tvAddress);
@@ -116,6 +133,23 @@ public class MainActivity extends Activity implements View.OnClickListener {
         }
         refreshQRCode();
         updateAccessibilityStatus();
+    }
+
+    /** 上次启动若崩溃过，弹窗显示崩溃日志（TV 屏幕上直接可见，方便截图反馈），显示后清空 */
+    private void showCrashReportIfExists(){
+        try {
+            String log = CrashHandler.readCrashLog(this);
+            if(!log.isEmpty()){
+                CrashHandler.clearCrashLog(this);
+                new android.app.AlertDialog.Builder(this)
+                        .setTitle("上次启动崩溃")
+                        .setMessage(log)
+                        .setPositiveButton("知道了", null)
+                        .setCancelable(true)
+                        .show();
+            }
+        } catch (Throwable ignored) {
+        }
     }
 
     private void openInputMethodSettings(){

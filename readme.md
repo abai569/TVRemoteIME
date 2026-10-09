@@ -8,6 +8,11 @@
 
 ## 更新日志（Fork 版本）
 
+### 2026-10 更新（v2.1.4）
+
+- 修复 2.1.3 在部分电视上反复闪退：布局卡片改为自适应高度，消除 ScrollView 内横向卡片测量兼容问题
+- 新增崩溃防护：启动异常记录到 crash.log 并在下次启动弹窗显示原因；主界面布局加载失败显示兜底页，不再反复闪退
+
 ### 2026-10 更新（v2.1.3）
 
 - 删除网页控制端顶部“检查更新”按钮（在线更新由电视端自动检查 + 主界面按钮触发）
@@ -132,7 +137,7 @@
 
 # 安装方法
 
-下载最新版本的APK包：https://github.com/abai569/TVRemoteIME/raw/master/released/IMEService-2.1.3.apk
+下载最新版本的APK包：https://github.com/abai569/TVRemoteIME/raw/master/released/IMEService-2.1.4.apk
 
 ## 一、通过adb命令安装应用  
 

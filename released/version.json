@@ -1,6 +1,6 @@
 {
-    "versionCode": 23,
-    "versionName": "2.1.3",
-    "installAPK": "https://raw.githubusercontent.com/abai569/TVRemoteIME/master/released/IMEService-2.1.3.apk",
-    "message": "1.删除网页控制端顶部“检查更新”按钮（在线更新改为电视端自动检查+主界面按钮触发）。\n2.电视端主界面布局重排：输入法设置与Web控制访问左右一行，触控板与DLNA左右一行；二维码加大并去除外框白边。"
+    "versionCode": 24,
+    "versionName": "2.1.4",
+    "installAPK": "https://raw.githubusercontent.com/abai569/TVRemoteIME/master/released/IMEService-2.1.4.apk",
+    "message": "1.修复2.1.3在部分电视上反复闪退：布局卡片改为自适应高度，消除ScrollView内横向卡片测量兼容问题。\n2.新增崩溃防护：任何启动异常会记录到crash.log并在下次启动弹窗显示原因，主界面布局加载失败时显示兜底页，不再反复闪退。"
 }

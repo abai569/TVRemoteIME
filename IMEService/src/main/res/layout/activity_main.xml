@@ -90,12 +90,13 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="16dp"
             android:orientation="horizontal"
+            android:gravity="top"
             android:weightSum="2">
 
             <!-- IME Setup -->
             <com.google.android.material.card.MaterialCardView
                 android:layout_width="0dp"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:layout_marginEnd="8dp"
                 style="@style/CardStyle">
@@ -194,7 +195,7 @@
             <!-- Web Access（客户端输入，含二维码） -->
             <com.google.android.material.card.MaterialCardView
                 android:layout_width="0dp"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:layout_marginStart="8dp"
                 style="@style/CardStyle">
@@ -212,8 +213,8 @@
 
                     <ImageView
                         android:id="@+id/ivQRCode"
-                        android:layout_width="240dp"
-                        android:layout_height="240dp"
+                        android:layout_width="200dp"
+                        android:layout_height="200dp"
                         android:layout_marginTop="12dp"
                         android:contentDescription="QR Code" />
 
@@ -262,12 +263,13 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="16dp"
             android:orientation="horizontal"
+            android:gravity="top"
             android:weightSum="2">
 
             <!-- Touchpad -->
             <com.google.android.material.card.MaterialCardView
                 android:layout_width="0dp"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:layout_marginEnd="8dp"
                 style="@style/CardStyle">
@@ -321,7 +323,7 @@
             <!-- DLNA -->
             <com.google.android.material.card.MaterialCardView
                 android:layout_width="0dp"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:layout_marginStart="8dp"
                 style="@style/CardStyle">
