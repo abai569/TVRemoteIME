@@ -38,3 +38,9 @@
 
 14. 推送 `.github/workflows/` 修改必须使用具备 `workflow` scope 的授权（Windows 本机 git 凭据已具备，云 VM 设备码登录默认不具备）。**优先在 Windows 本机推送全部改动**。
 15. 授权要长期有效（本机凭据/PAT），禁止依赖一次性设备码做发布操作。
+
+## 六、Release 更新说明（强制）
+
+16. **每次发布 Release 必须带更新说明（body）**：升级弹窗的“更新内容”取自 Release body，body 为空时用户只看到版本号、不知道改了什么。CI 发布完成后立即用 `gh api -X PATCH repos/abai569/TVRemoteIME/releases/{id} -f body=...` 补写说明（云端 gh 即可，无需 workflow scope）。
+17. 版本号同步**禁止用 sed 全局替换**（会把 readme 日志历史条目标题一并改掉、造成版本记录错乱）；只允许精确替换 build.gradle 的 versionCode/versionName 与各文件中的当前版本串。
+18. readme 更新日志只允许**在日志区头部插入新条目**，历史条目禁止改动。
