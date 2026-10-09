@@ -1,6 +1,7 @@
 var isSupportTouch = "ontouchend" in document ? true : false;
 var processbar1=$("#processbar1");
 var processbar2=$("#processbar2");
+var processbarApk=$("#processbarApk");
 var tabs = $('.tab-content');
 var keyActionTimer = null;
 var curKeyState = 0;
@@ -421,11 +422,15 @@ $("#btnUpload2").on("click", function(e) {
 	e.preventDefault();
 	$("#upfile2").click();
 });
+$("#btnUploadApk").on("click", function(e) {
+	e.preventDefault();
+	$("#upfileApk").click();
+});
 $("#btnUploadTorrent").on("click", function(e) {
 	e.preventDefault();
 	$("#upfile3").click();
 });
-$("#upfile,#upfile2,#upfile3").change(function() {
+$("#upfile,#upfileApk,#upfile2,#upfile3").change(function() {
 	var id = this.id;
 	var formData = new FormData;
 	var file = this.files[0];
@@ -433,10 +438,10 @@ $("#upfile,#upfile2,#upfile3").change(function() {
 	if(id == "upfile2"){
 		formData.append("path", curPath);
 		processbar = processbar2;
-	}else if(id == "upfile"){
+	}else if(id == "upfile" || id == "upfileApk"){
 		formData.append("autoInstall", $('#cbAutoInstall')[0].checked);
 		formData.append("useSystem", $('#playUseSystem')[0].checked);
-		processbar = processbar1;
+		processbar = id == "upfileApk" ? processbarApk : processbar1;
 	}
 	formData.append("file", file, encodeURI(file.uploadName || file.name));
 	$.ajax({
@@ -456,7 +461,6 @@ $("#upfile,#upfile2,#upfile3").change(function() {
 							width: p
 						}).text(p);
 					}
-					if(e.loaded == e.total) $(id).val("");
 				}, false);
 			}
 			return xhr;
@@ -485,6 +489,15 @@ $("#upfile,#upfile2,#upfile3").change(function() {
 				}
 			}else{
 				alert("抱歉，文件上传失败！");
+			}
+		},
+		complete: function() {
+			// 上传结束（成功或失败）后重置状态：清空文件选择框，进度条归零，保证可再次传送
+			$("#" + id).val("");
+			if(processbar){
+				processbar.css({
+					width: "0%"
+				}).text("");
 			}
 		}
 	});

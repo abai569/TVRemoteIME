@@ -1,6 +1,6 @@
 {
-    "versionCode": 14,
-    "versionName": "2.0.4",
+    "versionCode": 15,
+    "versionName": "2.0.5",
     "installAPK": "https://github.com/abai569/TVRemoteIME/raw/master/released/IMEService-release.apk",
-    "message": "1.使用正式签名密钥重新签名构建，安装一次后后续版本可直接覆盖升级，无需卸载旧版。\r\n2.修复网页控制端“传送文件”按钮无响应问题。\r\n3.遥控器按键面板默认折叠，退格/清空按钮右对齐。\r\n4.打开页面光标自动聚焦输入框。"
+    "message": "1.修复传送文件后状态未重置、再次传送无法使用的问题（上传结束后自动清空文件选择框、进度条归零）。\r\n2.修复应用管理页“上传APK”按钮无效的问题。\r\n3.使用正式签名构建，后续版本可直接覆盖升级。"
 }
