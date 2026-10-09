@@ -33,6 +33,12 @@ jobs:
           distribution: temurin
           java-version: '17'
 
+      - uses: android-actions/setup-android@v3
+        with:
+          packages: platform-tools
+      - name: Install Android SDK 36
+        run: sdkmanager 'platforms;android-36' 'build-tools;36.1.0'
+
       - name: Restore signing keystore from secrets
         run: |
           echo "${{ secrets.TVREMOTEIME_KEYSTORE_BASE64 }}" | base64 -d > "$RUNNER_TEMP/tvremoteime-release.keystore"
