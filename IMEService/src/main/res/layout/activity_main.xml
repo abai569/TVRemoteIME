@@ -267,7 +267,7 @@
                     </LinearLayout>
 
                     <TextView
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="12dp"
                         android:text="手动启动后需开启ADB模式才能使用远程输入及遥控功能"
