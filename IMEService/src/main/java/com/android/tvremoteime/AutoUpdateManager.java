@@ -23,6 +23,7 @@ import java.util.List;
  */
 public class AutoUpdateManager {
     private static String TAG = "AutoUpdateManager";
+    private static AutoUpdateManager instance = null;
     private Context context;
     private Handler handler;
     private File localFile = null;
@@ -40,10 +41,18 @@ public class AutoUpdateManager {
         this.context = context;
         this.handler = handler;
         this.localFile = new File(context.getExternalCacheDir(), context.getString(R.string.app_name) + ".apk");
-        this.startUpdateThread();
+        AutoUpdateManager.instance = this;
+        this.startUpdateThread(false);
     }
 
-    private void startUpdateThread(){
+    /** 手动触发一次更新检查（网页控制端“检查更新”按钮调用） */
+    public static void checkUpdateNow(){
+        if(AutoUpdateManager.instance != null){
+            AutoUpdateManager.instance.startUpdateThread(true);
+        }
+    }
+
+    private void startUpdateThread(final boolean manual){
         Thread thread = new Thread(new Runnable() {
             @Override
             public void run() {
@@ -51,10 +60,14 @@ public class AutoUpdateManager {
                     List<String> errors = new ArrayList<String>();
                     JSONObject versionObj = getServerVersionObj(errors);
                     if(versionObj == null){
-                        showUpdateError("获取版本信息失败，已依次尝试以下地址：\r\n" + join(errors));
+                        showDialog("更新检查失败", "获取版本信息失败，已依次尝试以下地址：\r\n" + join(errors));
                         return;
                     }
                     if(!needUpdate(versionObj)){
+                        if(manual){
+                            String versionName = AppPackagesHelper.getCurrentPackageVersion(context);
+                            showDialog("更新检查", "当前已是最新版本：" + versionName);
+                        }
                         return;
                     }
                     if(downloadInstallAPK(versionObj, errors)){
@@ -100,24 +113,24 @@ public class AutoUpdateManager {
                             }
                         });
                     } else {
-                        showUpdateError("新版本下载失败，已依次尝试以下地址：\r\n" + join(errors));
+                        showDialog("更新检查失败", "新版本下载失败，已依次尝试以下地址：\r\n" + join(errors));
                     }
                 }catch (Exception e){
                     Log.e(TAG, "startUpdateThread", e);
-                    showUpdateError("更新检查异常：" + e.getClass().getSimpleName() + ": " + e.getMessage());
+                    showDialog("更新检查失败", "更新检查异常：" + e.getClass().getSimpleName() + ": " + e.getMessage());
                 }
             }
         });
         thread.start();
     }
 
-    private void showUpdateError(final String reasons){
+    private void showDialog(final String title, final String reasons){
         handler.post(new Runnable() {
             @Override
             public void run() {
                 try {
                     AlertDialog.Builder builder = new AlertDialog.Builder(context);
-                    builder.setTitle(context.getString(R.string.app_name) + "更新检查失败");
+                    builder.setTitle(title);
                     builder.setMessage(reasons);
                     builder.setPositiveButton("知道了", new DialogInterface.OnClickListener() {
                         @Override
@@ -130,7 +143,7 @@ public class AutoUpdateManager {
                     dialog.setCanceledOnTouchOutside(false);
                     dialog.show();
                 } catch (Exception ex) {
-                    Log.e(TAG, "showUpdateError", ex);
+                    Log.e(TAG, "showDialog", ex);
                 }
             }
         });

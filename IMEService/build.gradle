@@ -18,8 +18,8 @@ android {
         applicationId 'com.android.tvremoteime'
         minSdk 21
         targetSdk 36
-        versionCode 16
-        versionName "2.0.6"
+        versionCode 17
+        versionName "2.0.7"
     }
 
     signingConfigs {

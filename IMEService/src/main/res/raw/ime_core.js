@@ -555,6 +555,20 @@ function upgrade() {
 		// 获取失败时保留页面默认显示的最新版本号
 	});
 }
+// 手动检查更新：触发电视端在线更新检查，结果弹窗出现在电视屏幕上
+$('#btnCheckUpdate').on('click', function(){
+	var btn = $(this);
+	btn.prop('disabled', true).text('检查中…');
+	$.get('/checkUpdate', function(){
+		btn.text('检查更新');
+		btn.prop('disabled', false);
+		alert('已触发检查，请在电视屏幕上查看结果提示');
+	}).fail(function(){
+		btn.text('检查更新');
+		btn.prop('disabled', false);
+		alert('触发检查失败，请确认电视与小盒精灵服务正常连接');
+	});
+});
 reloadAppList();
 loadFileList("");
 getDiskSpace();

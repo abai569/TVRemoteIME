@@ -1,6 +1,6 @@
 {
-    "versionCode": 16,
-    "versionName": "2.0.6",
-    "installAPK": "https://raw.githubusercontent.com/abai569/TVRemoteIME/master/released/IMEService-2.0.6.apk",
-    "message": "1.新增在线更新功能：启动时自动检查更新，通过三个GitHub加速代理（git-proxy.abai.eu.org / gh-proxy.com / ghfast.top）获取版本信息和下载新版本，全部失败后自动回退直连。\r\n2.更新失败时弹窗显示每个地址的具体失败原因，方便排查。"
+    "versionCode": 17,
+    "versionName": "2.0.7",
+    "installAPK": "https://raw.githubusercontent.com/abai569/TVRemoteIME/master/released/IMEService-2.0.7.apk",
+    "message": "1.网页控制端新增“检查更新”按钮：随时手动触发更新检查，结果以弹窗显示在电视上（发现新版本可直接“马上更新”，已是最新版本会提示，失败会显示具体原因）。"
 }

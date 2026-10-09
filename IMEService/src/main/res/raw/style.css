@@ -170,6 +170,26 @@ body {
 	opacity: 0.8;
 }
 
+.check-update-btn {
+	background: rgba(255, 255, 255, 0.15);
+	border: 1px solid rgba(255, 255, 255, 0.35);
+	color: white;
+	font-size: var(--font-size-sm);
+	padding: 2px 10px;
+	border-radius: var(--radius-sm);
+	cursor: pointer;
+	transition: background var(--transition-fast);
+}
+
+.check-update-btn:hover {
+	background: rgba(255, 255, 255, 0.28);
+}
+
+.check-update-btn:disabled {
+	opacity: 0.6;
+	cursor: default;
+}
+
 /* ========================================
    Navigation Tabs
    ======================================== */

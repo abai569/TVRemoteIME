@@ -7,6 +7,7 @@ import android.os.StatFs;
 import android.text.TextUtils;
 
 import com.android.tvremoteime.AppPackagesHelper;
+import com.android.tvremoteime.AutoUpdateManager;
 import com.android.tvremoteime.VideoPlayHelper;
 
 import java.io.File;
@@ -31,6 +32,7 @@ public class OtherGetRequestProcesser implements RequestProcesser {
             switch (fileName) {
                 case "/version":
                 case "/sdcard_stat":
+                case "/checkUpdate":
                     return true;
             }
         }
@@ -42,6 +44,10 @@ public class OtherGetRequestProcesser implements RequestProcesser {
         switch (fileName) {
             case "/version":
                 return RemoteServer.createPlainTextResponse(NanoHTTPD.Response.Status.OK, AppPackagesHelper.getCurrentPackageVersion(this.context) );
+            case "/checkUpdate":
+                // 触发 App 在线更新检查，结果以系统弹窗形式出现在电视上
+                AutoUpdateManager.checkUpdateNow();
+                return RemoteServer.createPlainTextResponse(NanoHTTPD.Response.Status.OK, "ok");
             case "/sdcard_stat":
                 return getSDCardStatResponse();
             default:
