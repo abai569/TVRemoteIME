@@ -8,6 +8,12 @@
 
 ## 更新日志（Fork 版本）
 
+### 2026-10 更新（v2.0.6）
+
+- **新增 App 内在线更新功能**：启动时自动检查更新，发现新版本弹窗提示并可一键下载安装
+- 版本信息获取与 APK 下载使用三个 GitHub 加速代理（`git-proxy.abai.eu.org` / `gh-proxy.com` / `ghfast.top`），依次尝试，全部失败后自动回退直连 GitHub
+- **更新失败会弹窗显示具体原因**（逐个列出每个地址的错误信息，如连接超时、HTTP 状态码、JSON 解析失败等），方便排查网络问题
+
 ### 2026-10 更新（v2.0.5）
 
 - **修复传送文件后状态未重置的问题**：上传结束后自动清空文件选择框、进度条归零，可再次传送（之前上传完成后旧文件残留在选择框里，再次点传送选同一个文件没反应）
@@ -87,7 +93,7 @@
 
 # 安装方法
 
-下载最新版本的APK包：https://github.com/abai569/TVRemoteIME/raw/master/released/IMEService-2.0.5.apk
+下载最新版本的APK包：https://github.com/abai569/TVRemoteIME/raw/master/released/IMEService-2.0.6.apk
 
 ## 一、通过adb命令安装应用  
 

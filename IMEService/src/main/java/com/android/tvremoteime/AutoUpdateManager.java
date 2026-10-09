@@ -7,7 +7,6 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.Handler;
 import android.text.TextUtils;
-import android.util.JsonReader;
 import android.util.Log;
 import android.view.WindowManager;
 
@@ -17,6 +16,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 /**
  * Created by kingt on 2018/4/11.
  */
@@ -25,7 +26,16 @@ public class AutoUpdateManager {
     private Context context;
     private Handler handler;
     private File localFile = null;
-    private static String VERSION_URL = "https://gitee.com/kingthy/TVRemoteIME/raw/master/released/version.json";
+
+    /** 版本信息清单：本仓库 released/version.json（直连地址，代理会自动拼接前缀） */
+    private static String VERSION_FILE_URL = "https://raw.githubusercontent.com/abai569/TVRemoteIME/master/released/version.json";
+    /** GitHub 加速代理列表（按顺序尝试，全部失败后走直连） */
+    private static final String[] PROXIES = {
+            "https://git-proxy.abai.eu.org",
+            "https://gh-proxy.com",
+            "https://ghfast.top"
+    };
+
     public AutoUpdateManager(Context context, Handler handler){
         this.context = context;
         this.handler = handler;
@@ -38,58 +48,101 @@ public class AutoUpdateManager {
             @Override
             public void run() {
                 try{
-                    JSONObject versionObj = getServerVersionObj();
-                    if(versionObj != null && needUpdate(versionObj)){
-                        if(downloadInstallAPK(versionObj)){
-                            String message = versionObj.has("message") ? versionObj.getString("message") : "";
-                            String versionName = versionObj.has("versionName") ? versionObj.getString("versionName") : AppPackagesHelper.getCurrentPackageVersion(context);
-                            StringBuilder msg = new StringBuilder();
-                            msg.append("发现新版本：").append(versionName);
-                            if(!TextUtils.isEmpty(message)){
-                                msg.append("\r\n更新内容：\r\n\r\n").append(message);
-                            }
-                            final String content = msg.toString();
-                            final boolean forced = versionObj.has("forced") && versionObj.getBoolean("forced");
+                    List<String> errors = new ArrayList<String>();
+                    JSONObject versionObj = getServerVersionObj(errors);
+                    if(versionObj == null){
+                        showUpdateError("获取版本信息失败，已依次尝试以下地址：\r\n" + join(errors));
+                        return;
+                    }
+                    if(!needUpdate(versionObj)){
+                        return;
+                    }
+                    if(downloadInstallAPK(versionObj, errors)){
+                        String message = versionObj.has("message") ? versionObj.getString("message") : "";
+                        String versionName = versionObj.has("versionName") ? versionObj.getString("versionName") : AppPackagesHelper.getCurrentPackageVersion(context);
+                        StringBuilder msg = new StringBuilder();
+                        msg.append("发现新版本：").append(versionName);
+                        if(!TextUtils.isEmpty(message)){
+                            msg.append("\r\n更新内容：\r\n\r\n").append(message);
+                        }
+                        final String content = msg.toString();
+                        final boolean forced = versionObj.has("forced") && versionObj.getBoolean("forced");
 
-                            handler.post(new Runnable() {
-                                @Override
-                                public void run() {
-                                    AlertDialog.Builder builder = new AlertDialog.Builder(context);
-                                    builder.setTitle(context.getString(R.string.app_name) + "版本更新提示").setIcon(R.drawable.ic_launcher);
-                                    builder.setMessage(content);
-                                    if (!forced) {
-                                        builder.setPositiveButton("稍后更新", new DialogInterface.OnClickListener() {
-                                            @Override
-                                            public void onClick(DialogInterface dialog, int which) {
-                                                dialog.dismiss();
-                                            }
-                                        });
-                                    }
-                                    builder.setNegativeButton("马上更新", new DialogInterface.OnClickListener() {
+                        handler.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                AlertDialog.Builder builder = new AlertDialog.Builder(context);
+                                builder.setTitle(context.getString(R.string.app_name) + "版本更新提示").setIcon(R.drawable.ic_launcher);
+                                builder.setMessage(content);
+                                if (!forced) {
+                                    builder.setPositiveButton("稍后更新", new DialogInterface.OnClickListener() {
                                         @Override
                                         public void onClick(DialogInterface dialog, int which) {
-                                            AppPackagesHelper.installPackage(localFile, context);
                                             dialog.dismiss();
                                         }
                                     });
-                                    try {
-                                        AlertDialog dialog = builder.create();
-                                        dialog.getWindow().setType(WindowManager.LayoutParams.TYPE_SYSTEM_ALERT);
-                                        dialog.setCanceledOnTouchOutside(false);
-                                        dialog.show();
-                                    } catch (Exception ex) {
-                                        AppPackagesHelper.installPackage(localFile, context);
-                                    }
                                 }
-                            });
-                        }
+                                builder.setNegativeButton("马上更新", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        AppPackagesHelper.installPackage(localFile, context);
+                                        dialog.dismiss();
+                                    }
+                                });
+                                try {
+                                    AlertDialog dialog = builder.create();
+                                    dialog.getWindow().setType(WindowManager.LayoutParams.TYPE_SYSTEM_ALERT);
+                                    dialog.setCanceledOnTouchOutside(false);
+                                    dialog.show();
+                                } catch (Exception ex) {
+                                    AppPackagesHelper.installPackage(localFile, context);
+                                }
+                            }
+                        });
+                    } else {
+                        showUpdateError("新版本下载失败，已依次尝试以下地址：\r\n" + join(errors));
                     }
                 }catch (Exception e){
                     Log.e(TAG, "startUpdateThread", e);
+                    showUpdateError("更新检查异常：" + e.getClass().getSimpleName() + ": " + e.getMessage());
                 }
             }
         });
         thread.start();
+    }
+
+    private void showUpdateError(final String reasons){
+        handler.post(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(context);
+                    builder.setTitle(context.getString(R.string.app_name) + "更新检查失败");
+                    builder.setMessage(reasons);
+                    builder.setPositiveButton("知道了", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                        }
+                    });
+                    AlertDialog dialog = builder.create();
+                    dialog.getWindow().setType(WindowManager.LayoutParams.TYPE_SYSTEM_ALERT);
+                    dialog.setCanceledOnTouchOutside(false);
+                    dialog.show();
+                } catch (Exception ex) {
+                    Log.e(TAG, "showUpdateError", ex);
+                }
+            }
+        });
+    }
+
+    private String join(List<String> errors){
+        StringBuilder sb = new StringBuilder();
+        for(int i = 0; i < errors.size(); i++){
+            if(i > 0) sb.append("\r\n");
+            sb.append((i + 1)).append(". ").append(errors.get(i));
+        }
+        return sb.toString();
     }
 
     private int getCurrentPackageVersion(){
@@ -100,15 +153,30 @@ public class AutoUpdateManager {
         return -1;
     }
 
-    private JSONObject getServerVersionObj(){
-        try{
-            String jsonData = HTTPGet.readString(VERSION_URL);
-            if (!TextUtils.isEmpty(jsonData)) {
-                if(Environment.needDebug) Environment.debug(TAG, "getServerVersionObj:\r\n" + jsonData);
-                return new JSONObject(jsonData);
+    /** 依次尝试 3 个代理 + 直连 获取版本信息，记录每个地址的失败原因 */
+    private JSONObject getServerVersionObj(List<String> errors){
+        for(String proxy : PROXIES){
+            String url = proxy + "/" + VERSION_FILE_URL;
+            String[] res = HTTPGet.readStringWithError(url);
+            if(res[0] != null){
+                try {
+                    return new JSONObject(res[0]);
+                } catch (JSONException e) {
+                    errors.add(url + " → JSON解析失败: " + e.getMessage());
+                }
+            } else {
+                errors.add(url + " → " + res[1]);
             }
-        } catch (Exception e) {
-            Log.e(TAG, "getServerVersionObj", e);
+        }
+        String[] res = HTTPGet.readStringWithError(VERSION_FILE_URL);
+        if(res[0] != null){
+            try {
+                return new JSONObject(res[0]);
+            } catch (JSONException e) {
+                errors.add(VERSION_FILE_URL + " → JSON解析失败: " + e.getMessage());
+            }
+        } else {
+            errors.add(VERSION_FILE_URL + " → " + res[1]);
         }
         return null;
     }
@@ -141,20 +209,38 @@ public class AutoUpdateManager {
         }
     }
 
-    private boolean downloadInstallAPK(JSONObject versionObj){
+    /** 依次尝试 3 个代理 + 直连 下载 APK，记录每个地址的失败原因 */
+    private boolean downloadInstallAPK(JSONObject versionObj, List<String> errors){
         try {
             if(!needDownloadAPK(versionObj)){
                 return true;
             }
 
             String url = versionObj.getString("installAPK");
-            if(TextUtils.isEmpty(url)) return false;
+            if(TextUtils.isEmpty(url)) {
+                errors.add("version.json 中缺少 installAPK 下载地址");
+                return false;
+            }
             if(Environment.needDebug) Environment.debug(TAG, "downloadInstallAPK starting: " + url);
-            boolean flag = HTTPGet.downloadFile(url, this.localFile);
-            if(Environment.needDebug) Environment.debug(TAG, "downloadInstallAPK finished. result: " + flag);
-            return flag;
+            for(String proxy : PROXIES){
+                String proxyUrl = proxy + "/" + url;
+                String[] res = HTTPGet.downloadFileWithError(proxyUrl, this.localFile);
+                if("true".equals(res[0])){
+                    if(Environment.needDebug) Environment.debug(TAG, "downloadInstallAPK finished via " + proxyUrl);
+                    return true;
+                }
+                errors.add(proxyUrl + " → " + res[1]);
+            }
+            String[] res = HTTPGet.downloadFileWithError(url, this.localFile);
+            if("true".equals(res[0])){
+                if(Environment.needDebug) Environment.debug(TAG, "downloadInstallAPK finished via " + url);
+                return true;
+            }
+            errors.add(url + " → " + res[1]);
+            return false;
         } catch (Exception e) {
             Log.e(TAG, "downloadInstallAPK", e);
+            errors.add("下载异常: " + e.getClass().getSimpleName() + ": " + e.getMessage());
         }
         return false;
     }
