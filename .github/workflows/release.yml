@@ -1,0 +1,86 @@
+# 构建并发布正式签名的 Release APK
+# 触发方式：
+#   1. 推送形如 2.0.8 的 tag（推荐，版本号取自 tag）
+#   2. 手动 workflow_dispatch（输入版本号）
+# 签名密钥从 GitHub Secret 还原（TVREMOTEIME_*），APK 版本号 = 10 + patch（2.0.3→13 ... 2.0.7→17）
+name: Build signed release APK
+
+on:
+  push:
+    tags:
+      - '2.*'
+  workflow_dispatch:
+    inputs:
+      version:
+        description: '版本号（形如 2.0.8，仅手动触发时使用）'
+        required: true
+        default: '2.0.8'
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      - name: Restore signing keystore from secrets
+        run: |
+          echo "${{ secrets.TVREMOTEIME_KEYSTORE_BASE64 }}" | base64 -d > "$RUNNER_TEMP/tvremoteime-release.keystore"
+          cat > keystore.properties <<'EOF'
+          storeFile=$RUNNER_TEMP/tvremoteime-release.keystore
+          storePassword=${{ secrets.TVREMOTEIME_STORE_PASSWORD }}
+          keyAlias=${{ secrets.TVREMOTEIME_KEY_ALIAS }}
+          keyPassword=${{ secrets.TVREMOTEIME_KEY_PASSWORD }}
+          EOF
+
+      - name: Resolve version
+        id: ver
+        run: |
+          set -euo pipefail
+          if [[ "${{ github.event_name }}" == "push" ]]; then
+            v="${GITHUB_REF_NAME#v}"
+          else
+            v="${{ github.event.inputs.version }}"
+          fi
+          [[ "$v" =~ ^2\.[0-9]+\.[0-9]+$ ]] || { echo "版本号必须是 2.x.y 格式（当前 $v）"; exit 1; }
+          patch="${v##*.}"
+          echo "name=$v" >> "$GITHUB_OUTPUT"
+          echo "code=$((10 + patch))" >> "$GITHUB_OUTPUT"
+
+      - name: Build signed release APK
+        env:
+          TVREMOTEIME_VERSION_NAME: ${{ steps.ver.outputs.name }}
+          TVREMOTEIME_VERSION_CODE: ${{ steps.ver.outputs.code }}
+        run: |
+          chmod +x gradlew
+          ./gradlew :IMEService:assembleRelease --no-daemon
+
+      - name: Publish GitHub Release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          VERSION: ${{ steps.ver.outputs.name }}
+        run: |
+          set -euo pipefail
+          apk="IMEService-$VERSION.apk"
+          cp IMEService/build/outputs/apk/release/IMEService-release.apk "$apk"
+          if [[ "${{ github.event_name }}" == "push" ]]; then
+            tag="$GITHUB_REF_NAME"
+          else
+            tag="$VERSION"
+            git tag "$VERSION"
+            git push origin "refs/tags/$VERSION"
+          fi
+          gh release create "$tag" "$apk" \
+            --repo "$GITHUB_REPOSITORY" \
+            --title "$VERSION" \
+            --generate-notes

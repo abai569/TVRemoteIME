@@ -9,6 +9,10 @@ if (keystorePropertiesFile.exists()) {
     keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
 }
 
+// 版本号支持环境变量覆盖（GitHub Actions 发布时由 tag 注入），本地构建缺省用默认值
+def envVersionCode = System.getenv('TVREMOTEIME_VERSION_CODE')
+def envVersionName = System.getenv('TVREMOTEIME_VERSION_NAME')
+
 android {
     namespace 'com.android.tvremoteime'
     compileSdk 36
@@ -18,8 +22,8 @@ android {
         applicationId 'com.android.tvremoteime'
         minSdk 21
         targetSdk 36
-        versionCode 17
-        versionName "2.0.7"
+        versionCode envVersionCode != null ? envVersionCode.toInteger() : 17
+        versionName envVersionName != null ? envVersionName : "2.0.7"
     }
 
     signingConfigs {
