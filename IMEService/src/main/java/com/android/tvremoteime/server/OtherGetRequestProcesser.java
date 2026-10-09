@@ -45,9 +45,8 @@ public class OtherGetRequestProcesser implements RequestProcesser {
             case "/version":
                 return RemoteServer.createPlainTextResponse(NanoHTTPD.Response.Status.OK, AppPackagesHelper.getCurrentPackageVersion(this.context) );
             case "/checkUpdate":
-                // 触发 App 在线更新检查，结果以系统弹窗形式出现在电视上
-                AutoUpdateManager.checkUpdateNow();
-                return RemoteServer.createPlainTextResponse(NanoHTTPD.Response.Status.OK, "ok");
+                // 触发 App 在线更新检查，检查结果直接返回给网页端显示（TV 弹窗同时尽力弹出）
+                return RemoteServer.createPlainTextResponse(NanoHTTPD.Response.Status.OK, AutoUpdateManager.checkUpdateAndGetResult());
             case "/sdcard_stat":
                 return getSDCardStatResponse();
             default:

@@ -63,6 +63,12 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
         refreshQRCode();
         updateAccessibilityStatus();
+
+        // TV 遥控器焦点默认落在“检查更新”按钮上（header 是第一个可聚焦元素）
+        View checkUpdateBtn = findViewById(R.id.btnCheckUpdate);
+        if (checkUpdateBtn != null) {
+            checkUpdateBtn.requestFocus();
+        }
     }
 
     @Override

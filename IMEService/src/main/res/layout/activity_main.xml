@@ -6,6 +6,8 @@
     android:layout_height="match_parent"
     android:background="@color/md_theme_background"
     android:fillViewport="true"
+    android:focusable="false"
+    android:focusableInTouchMode="false"
     tools:context="com.android.tvremoteime.MainActivity">
 
     <LinearLayout
@@ -70,12 +72,15 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="检查更新"
-                        android:textColor="@color/md_theme_primary"
+                        android:textColor="@color/btn_check_update_text"
                         android:textSize="14sp"
+                        android:textStyle="bold"
                         android:focusable="true"
                         android:focusableInTouchMode="true"
-                        android:nextFocusUp="@id/btnCheckUpdate"
-                        app:backgroundTint="@android:color/white"
+                        android:clickable="true"
+                        android:minHeight="40dp"
+                        android:minWidth="120dp"
+                        app:backgroundTint="@color/btn_check_update_bg"
                         app:cornerRadius="20dp" />
 
                 </LinearLayout>

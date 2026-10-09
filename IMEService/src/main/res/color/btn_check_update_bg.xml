@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- 遥控器选中（聚焦）时：亮黄色，TV 上一眼可见 -->
+    <item android:state_focused="true" android:state_pressed="false" android:color="#FFD54F" />
+    <item android:state_focused="false" android:state_pressed="true" android:color="#BDBDBD" />
+    <item android:color="@android:color/white" />
+</selector>
