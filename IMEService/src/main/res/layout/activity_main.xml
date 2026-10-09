@@ -93,10 +93,10 @@
             android:gravity="top"
             android:weightSum="2">
 
-            <!-- Web Access（二维码卡片，居左） -->
+            <!-- Web Access（二维码卡片，居左；wrap_content 以包住二维码，避免底部被截） -->
             <com.google.android.material.card.MaterialCardView
                 android:layout_width="0dp"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:layout_marginEnd="8dp"
                 style="@style/CardStyle">
@@ -178,10 +178,10 @@
 
             </com.google.android.material.card.MaterialCardView>
 
-            <!-- IME Setup -->
+            <!-- IME Setup（match_parent 与左侧二维码卡等高） -->
             <com.google.android.material.card.MaterialCardView
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:layout_marginStart="8dp"
                 style="@style/CardStyle">
