@@ -39,6 +39,11 @@ jobs:
       - name: Install Android SDK 36
         run: sdkmanager 'platforms;android-36' 'build-tools;36.1.0'
 
+      - name: Set up Gradle 8.13
+        uses: gradle/gradle-build-action@v3
+        with:
+          gradle-version: '8.13'
+
       - name: Restore signing keystore from secrets
         run: |
           echo "${{ secrets.TVREMOTEIME_KEYSTORE_BASE64 }}" | base64 -d > "$RUNNER_TEMP/tvremoteime-release.keystore"
@@ -68,8 +73,7 @@ jobs:
           TVREMOTEIME_VERSION_NAME: ${{ steps.ver.outputs.name }}
           TVREMOTEIME_VERSION_CODE: ${{ steps.ver.outputs.code }}
         run: |
-          chmod +x gradlew
-          ./gradlew :IMEService:assembleRelease --no-daemon
+          gradle :IMEService:assembleRelease --no-daemon
 
       - name: Publish GitHub Release
         env:
