@@ -212,7 +212,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
         String address = RemoteServer.getServerAddress(this);
         addressView.setText(address);
         // 生成分辨率保持 150，避免加大生成尺寸在个别电视 ROM 上的潜在兼容问题
-        qrCodeImage.setImageBitmap(QRCodeGen.generateBitmap(address, 480, 480));
+        qrCodeImage.setImageBitmap(QRCodeGen.generateBitmap(address, 360, 360));
     }
 
 

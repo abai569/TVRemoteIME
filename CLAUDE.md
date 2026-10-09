@@ -15,8 +15,8 @@ The app runs an embedded HTTP server (NanoHTTPD on port 9978) that serves a web 
 
 ## Current Version
 
-- **versionCode**: 30
-- **versionName**: 2.2.0
+- **versionCode**: 31
+- **versionName**: 2.2.1
 - **signing**: release builds are signed with `keystore.properties` (storeFile `C:/Users/57064/app/tvremoteime-release.keystore`, gitignored)
 
 ## Build Commands

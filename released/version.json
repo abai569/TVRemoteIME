@@ -1,6 +1,6 @@
 {
-    "versionCode": 30,
-    "versionName": "2.2.0",
-    "installAPK": "https://raw.githubusercontent.com/abai569/TVRemoteIME/master/released/IMEService-2.2.0.apk",
-    "message": "1.网址移到测试输入框下方显示，不再被截断；二维码上提且不被底部遮挡。"
+    "versionCode": 31,
+    "versionName": "2.2.1",
+    "installAPK": "https://raw.githubusercontent.com/abai569/TVRemoteIME/master/released/IMEService-2.2.1.apk",
+    "message": "1.二维码与标题左侧对齐，间距与右卡“输入法设置→第一步”一致。\n2.二维码尺寸调整（180dp），高度与右卡“第一步→手动启动”区域一致。"
 }
