@@ -191,7 +191,7 @@ public class AutoUpdateManager {
                                 AppPackagesHelper.installPackage(localFile, context);
                             }
                         });
-                        firstFocus = btnLater;
+                        firstFocus = btnNow;
                     } else {
                         btnLater.setVisibility(View.GONE);
                         btnNow.setVisibility(View.GONE);

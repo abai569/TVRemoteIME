@@ -2,5 +2,5 @@
     "versionCode": 29,
     "versionName": "2.1.9",
     "installAPK": "https://raw.githubusercontent.com/abai569/TVRemoteIME/master/released/IMEService-2.1.9.apk",
-    "message": "1.两个输入框（测试输入、DLNA设备名称）高度与设置按钮对齐。\n2.触控板“去设置”按钮改名为“设置”。"
+    "message": "1.二维码卡片移到左侧，输入法设置卡片移到右侧。\n2.修复网址未显示：网址独立一行完整展示。\n3.在线更新弹窗默认焦点在“马上更新”按钮。\n4.两个输入框（测试输入、DLNA设备名称）高度与设置按钮对齐。\n5.触控板“去设置”按钮改名为“设置”。"
 }
