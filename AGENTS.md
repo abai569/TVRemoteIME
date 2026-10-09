@@ -41,6 +41,8 @@
 
 ## 六、Release 更新说明（强制）
 
+19. **版本号逢九进一**：patch 到 9 后必须进 minor、patch 归 0（2.2.9 → 2.3.0，不允许 2.2.10）；versionCode 按 `major*10000+minor*100+patch` 计算，新值必须大于旧值。
+
 16. **每次发布 Release 必须带更新说明（body）**：升级弹窗的“更新内容”取自 Release body，body 为空时用户只看到版本号、不知道改了什么。CI 发布完成后立即用 `gh api -X PATCH repos/abai569/TVRemoteIME/releases/{id} -f body=...` 补写说明（云端 gh 即可，无需 workflow scope）。
 17. 版本号同步**禁止用 sed 全局替换**（会把 readme 日志历史条目标题一并改掉、造成版本记录错乱）；只允许精确替换 build.gradle 的 versionCode/versionName 与各文件中的当前版本串。
 18. readme 更新日志只允许**在日志区头部插入新条目**，历史条目禁止改动。
