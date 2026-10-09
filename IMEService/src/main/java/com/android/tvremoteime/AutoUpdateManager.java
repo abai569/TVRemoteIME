@@ -289,6 +289,18 @@ public class AutoUpdateManager {
         }
     }
 
+    /** 校验本地 APK 是否可解析（下载完整性检查：半截/损坏文件无法解析包信息） */
+    private boolean isValidApk(File f){
+        try {
+            if(f == null || !f.exists() || f.length() < 1000) return false;
+            PackageManager pm = context.getPackageManager();
+            PackageInfo packInfo = pm.getPackageArchiveInfo(f.getAbsolutePath(), PackageManager.GET_ACTIVITIES);
+            return packInfo != null && !TextUtils.isEmpty(packInfo.packageName);
+        }catch (Exception e){
+            return false;
+        }
+    }
+
     /** 依次尝试 3 个代理 + 直连 下载 APK，记录每个地址的失败原因 */
     private boolean downloadInstallAPK(JSONObject versionObj, List<String> errors){
         try {
@@ -306,13 +318,18 @@ public class AutoUpdateManager {
                 String proxyUrl = proxy + "/" + url;
                 String[] res = HTTPGet.downloadFileWithError(proxyUrl, this.localFile);
                 if("true".equals(res[0])){
-                    if(Environment.needDebug) Environment.debug(TAG, "downloadInstallAPK finished via " + proxyUrl);
-                    return true;
+                    // 下载完成必须校验 APK 可解析：代理传输中断会得到半截文件，直接安装会报“未签名/解析失败”
+                    if(isValidApk(this.localFile)){
+                        if(Environment.needDebug) Environment.debug(TAG, "downloadInstallAPK finished via " + proxyUrl);
+                        return true;
+                    }
+                    errors.add(proxyUrl + " → 下载不完整，APK无法解析，尝试下一个源");
+                    continue;
                 }
                 errors.add(proxyUrl + " → " + res[1]);
             }
             String[] res = HTTPGet.downloadFileWithError(url, this.localFile);
-            if("true".equals(res[0])){
+            if("true".equals(res[0]) && isValidApk(this.localFile)){
                 if(Environment.needDebug) Environment.debug(TAG, "downloadInstallAPK finished via " + url);
                 return true;
             }
