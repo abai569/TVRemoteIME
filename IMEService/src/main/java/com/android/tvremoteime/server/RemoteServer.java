@@ -165,6 +165,11 @@ public class RemoteServer extends NanoHTTPD
             if (fileName.indexOf('?') >= 0) {
                 fileName = fileName.substring(0, fileName.indexOf('?'));
             }
+            // 崩溃日志查看：/crashlog（即使主界面崩溃，服务进程仍在时手机浏览器可直接查看）
+            if (session.getMethod() == Method.GET && "/crashlog".equals(fileName)) {
+                return createPlainTextResponse(NanoHTTPD.Response.Status.OK,
+                        com.android.tvremoteime.CrashHandler.readCrashLog(this.mContext));
+            }
             if (session.getMethod() == Method.GET) {
                 for(RequestProcesser processer : this.getRequestProcessers){
                     if(processer.isRequest(session, fileName)){

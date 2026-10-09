@@ -211,8 +211,8 @@ public class MainActivity extends Activity implements View.OnClickListener {
     private void refreshQRCode(){
         String address = RemoteServer.getServerAddress(this);
         addressView.setText(address);
-        // 二维码加大显示后同步提高生成分辨率，保证清晰
-        qrCodeImage.setImageBitmap(QRCodeGen.generateBitmap(address, 480, 480));
+        // 生成分辨率保持 150，避免加大生成尺寸在个别电视 ROM 上的潜在兼容问题
+        qrCodeImage.setImageBitmap(QRCodeGen.generateBitmap(address, 150, 150));
     }
 
 

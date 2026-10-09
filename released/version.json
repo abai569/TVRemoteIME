@@ -1,6 +1,6 @@
 {
-    "versionCode": 24,
-    "versionName": "2.1.4",
-    "installAPK": "https://raw.githubusercontent.com/abai569/TVRemoteIME/master/released/IMEService-2.1.4.apk",
-    "message": "1.修复2.1.3在部分电视上反复闪退：布局卡片改为自适应高度，消除ScrollView内横向卡片测量兼容问题。\n2.新增崩溃防护：任何启动异常会记录到crash.log并在下次启动弹窗显示原因，主界面布局加载失败时显示兜底页，不再反复闪退。"
+    "versionCode": 25,
+    "versionName": "2.1.5",
+    "installAPK": "https://raw.githubusercontent.com/abai569/TVRemoteIME/master/released/IMEService-2.1.5.apk",
+    "message": "1.新增网页端崩溃日志查看：手机浏览器访问 http://电视IP:9978/crashlog 可直接看到崩溃堆栈。\n2.二维码生成分辨率改回150，排除大尺寸生成的潜在兼容问题。\n3.仍保留：崩溃自动记录+下次启动弹窗显示+主界面兜底页。"
 }
