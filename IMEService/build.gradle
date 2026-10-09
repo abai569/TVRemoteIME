@@ -22,8 +22,8 @@ android {
         applicationId 'com.android.tvremoteime'
         minSdk 21
         targetSdk 36
-        versionCode envVersionCode != null ? envVersionCode.toInteger() : 20
-        versionName envVersionName != null ? envVersionName : "2.1.0"
+        versionCode envVersionCode != null ? envVersionCode.toInteger() : 21
+        versionName envVersionName != null ? envVersionName : "2.1.1"
     }
 
     signingConfigs {
@@ -60,5 +60,6 @@ dependencies {
     implementation project(path: ':DroidDLNA')
     implementation 'androidx.annotation:annotation:1.7.1'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
+    implementation 'androidx.core:core:1.13.1'
     implementation 'com.google.android.material:material:1.11.0'
 }

@@ -8,6 +8,11 @@
 
 ## 更新日志（Fork 版本）
 
+### 2026-10 更新（v2.1.1）
+
+- 修复网页端“传送后自动安装APK”不起作用：改用原始文件名判断 APK 类型，并改用 FileProvider 安装（Android 7.0+ 必须 content:// URI，之前的 file:// 方式被系统拦截）
+- 在线更新“马上更新”的安装同样修复
+
 ### 2026-10 更新（v2.1.0）
 
 - 网页端“检查更新”按钮：检查结果直接显示在网页上（当前最新 / 发现新版本 / 失败原因），不再依赖电视端悬浮窗弹窗
@@ -117,7 +122,7 @@
 
 # 安装方法
 
-下载最新版本的APK包：https://github.com/abai569/TVRemoteIME/raw/master/released/IMEService-2.1.0.apk
+下载最新版本的APK包：https://github.com/abai569/TVRemoteIME/raw/master/released/IMEService-2.1.1.apk
 
 ## 一、通过adb命令安装应用  
 

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<paths>
+    <!-- 应用内部缓存目录（NanoHTTPD 上传临时文件、更新包下载目录） -->
+    <cache-path name="cache" path="." />
+    <!-- 应用外部缓存目录（AutoUpdateManager 下载 APK 的目录） -->
+    <external-cache-path name="external_cache" path="." />
+    <!-- 应用内部文件目录 -->
+    <files-path name="files" path="." />
+</paths>

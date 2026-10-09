@@ -11,6 +11,8 @@ import android.net.Uri;
 import android.provider.Settings;
 import android.util.Log;
 
+import androidx.core.content.FileProvider;
+
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.Serializable;
@@ -146,9 +148,11 @@ public class AppPackagesHelper {
 
     public static void installPackage(final File apkFile, final Context context){
         try {
-            Uri uri = Uri.fromFile(apkFile);
+            // targetSdk>=24 时必须用 FileProvider 暴露 content:// URI，否则抛 FileUriExposedException
+            Uri uri = FileProvider.getUriForFile(context, context.getPackageName() + ".fileprovider", apkFile);
             Intent intent = new Intent();
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
             intent.setAction(Intent.ACTION_VIEW);
             intent.setDataAndType(uri, "application/vnd.android.package-archive");
             context.startActivity(intent);

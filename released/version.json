@@ -1,6 +1,6 @@
 {
-    "versionCode": 20,
-    "versionName": "2.1.0",
-    "installAPK": "https://raw.githubusercontent.com/abai569/TVRemoteIME/master/released/IMEService-2.1.0.apk",
-    "message": "1.网页端“检查更新”按钮：检查结果直接显示在网页上（最新/发现新版本/失败原因），不再依赖电视悬浮窗弹窗。\n2.TV端主界面“检查更新”按钮：弹窗改用主界面窗口一定能弹出；聚焦时按钮变亮黄色，App打开即选中按钮，遥控器直接按确定即可。"
+    "versionCode": 21,
+    "versionName": "2.1.1",
+    "installAPK": "https://raw.githubusercontent.com/abai569/TVRemoteIME/master/released/IMEService-2.1.1.apk",
+    "message": "1.修复网页端“传送后自动安装APK”不起作用：改用原始文件名判断APK类型，并用FileProvider安装（高版本Android必须content:// URI才能安装）。\n2.在线更新“马上更新”安装同样修复。"
 }
