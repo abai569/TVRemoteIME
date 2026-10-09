@@ -8,7 +8,7 @@
 
 ## 更新日志（Fork 版本）
 
-### 2026-10 更新（v2.2.10）
+### 2026-10 更新（v2.3.0）
 
 - 修复：Web 控制访问卡高度不足导致二维码底部被截断，卡片改为自适应内容高度、与右侧卡等高
 
@@ -178,7 +178,7 @@
 
 # 安装方法
 
-下载最新版本的APK包：https://github.com/abai569/TVRemoteIME/raw/master/released/IMEService-2.2.10.apk
+下载最新版本的APK包：https://github.com/abai569/TVRemoteIME/raw/master/released/IMEService-2.3.0.apk
 
 ## 一、通过adb命令安装应用  
 
