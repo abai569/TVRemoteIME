@@ -8,6 +8,14 @@
 
 ## 更新日志（Fork 版本）
 
+### 2026-10 更新（v2.0.8）
+
+- **TV 端 App 主界面新增“检查更新”按钮**：打开 App 顶部标题卡片即可看到当前版本号，点“检查更新”按钮手动触发更新检查，结果弹窗直接显示在电视上
+  - 发现新版本 → 弹出“马上更新”按钮一键下载安装
+  - 已是最新版本 → 提示“当前已是最新版本”
+  - 检查失败 → 显示具体失败原因（逐个代理地址列出）
+- 发布改为 GitHub Actions 自动构建（tag 触发，正式签名）
+
 ### 2026-10 更新（v2.0.7）
 
 - **网页控制端新增“检查更新”按钮**：在版本号旁边，点击即可手动触发 TV 端更新检查，结果弹窗直接显示在电视上
@@ -100,7 +108,7 @@
 
 # 安装方法
 
-下载最新版本的APK包：https://github.com/abai569/TVRemoteIME/raw/master/released/IMEService-2.0.7.apk
+下载最新版本的APK包：https://github.com/abai569/TVRemoteIME/raw/master/released/IMEService-2.0.8.apk
 
 ## 一、通过adb命令安装应用  
 

@@ -52,6 +52,15 @@ public class AutoUpdateManager {
         }
     }
 
+    /** 手动触发一次更新检查（TV 端主界面“检查更新”按钮调用；服务未启动时会先创建实例） */
+    public static void checkUpdateNow(Context context, Handler handler){
+        if(AutoUpdateManager.instance == null){
+            new AutoUpdateManager(context, handler);
+        } else {
+            AutoUpdateManager.instance.startUpdateThread(true);
+        }
+    }
+
     private void startUpdateThread(final boolean manual){
         Thread thread = new Thread(new Runnable() {
             @Override

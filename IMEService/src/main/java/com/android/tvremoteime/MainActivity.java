@@ -6,6 +6,8 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.preference.PreferenceManager;
 import android.provider.Settings;
 import android.text.TextUtils;
@@ -43,11 +45,18 @@ public class MainActivity extends Activity implements View.OnClickListener {
         this.setTitle(this.getResources().getString( R.string.app_name) + "  V" + AppPackagesHelper.getCurrentPackageVersion(this));
         dlnaNameText.setText(DLNAUtils.getDLNANameSuffix(this.getApplicationContext()));
 
+        // 显示当前版本号
+        TextView versionView = findViewById(R.id.tvAppVersion);
+        if (versionView != null) {
+            versionView.setText("当前版本：" + AppPackagesHelper.getCurrentPackageVersion(this));
+        }
+
         // 设置按钮点击监听器
         findViewById(R.id.btnUseIME).setOnClickListener(this);
         findViewById(R.id.btnSetIME).setOnClickListener(this);
         findViewById(R.id.btnStartService).setOnClickListener(this);
         findViewById(R.id.btnSetDLNA).setOnClickListener(this);
+        findViewById(R.id.btnCheckUpdate).setOnClickListener(this);
         if (accessibilityButton != null) {
             accessibilityButton.setOnClickListener(this);
         }
@@ -95,6 +104,9 @@ public class MainActivity extends Activity implements View.OnClickListener {
             DLNAUtils.setDLNANameSuffix(this.getApplicationContext(), dlnaNameText.getText().toString());
         } else if (id == R.id.btnAccessibility) {
             openAccessibilitySettings();
+        } else if (id == R.id.btnCheckUpdate) {
+            // TV 端“检查更新”按钮：手动触发在线更新检查，结果以弹窗显示
+            AutoUpdateManager.checkUpdateNow(this, new Handler(Looper.getMainLooper()));
         }
         refreshQRCode();
         updateAccessibilityStatus();

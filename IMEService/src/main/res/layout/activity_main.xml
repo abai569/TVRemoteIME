@@ -45,6 +45,36 @@
                     android:textColor="@color/md_theme_primaryContainer"
                     android:textSize="14sp" />
 
+                <!-- 版本号 + 检查更新 -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical">
+
+                    <TextView
+                        android:id="@+id/tvAppVersion"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="当前版本："
+                        android:textColor="@color/md_theme_onPrimary"
+                        android:textSize="14sp"
+                        android:textStyle="bold" />
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btnCheckUpdate"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="检查更新"
+                        android:textColor="@color/md_theme_primary"
+                        android:textSize="14sp"
+                        app:backgroundTint="@android:color/white"
+                        app:cornerRadius="20dp" />
+
+                </LinearLayout>
+
             </LinearLayout>
 
         </com.google.android.material.card.MaterialCardView>
