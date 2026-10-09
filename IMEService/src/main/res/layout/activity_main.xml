@@ -19,6 +19,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="16dp"
+            android:focusable="false"
+            android:clickable="false"
             app:cardCornerRadius="16dp"
             app:cardElevation="4dp"
             app:cardBackgroundColor="@color/md_theme_primary">
@@ -70,6 +72,9 @@
                         android:text="检查更新"
                         android:textColor="@color/md_theme_primary"
                         android:textSize="14sp"
+                        android:focusable="true"
+                        android:focusableInTouchMode="true"
+                        android:nextFocusUp="@id/btnCheckUpdate"
                         app:backgroundTint="@android:color/white"
                         app:cornerRadius="20dp" />
 

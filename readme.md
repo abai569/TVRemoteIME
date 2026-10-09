@@ -8,6 +8,10 @@
 
 ## 更新日志（Fork 版本）
 
+### 2026-10 更新（v2.0.9）
+
+- 修复 TV 端主界面“检查更新”按钮遥控器焦点无法选中的问题：标题卡片不再拦截焦点，按钮可正常选中并高亮
+
 ### 2026-10 更新（v2.0.8）
 
 - **TV 端 App 主界面新增“检查更新”按钮**：打开 App 顶部标题卡片即可看到当前版本号，点“检查更新”按钮手动触发更新检查，结果弹窗直接显示在电视上
@@ -108,7 +112,7 @@
 
 # 安装方法
 
-下载最新版本的APK包：https://github.com/abai569/TVRemoteIME/raw/master/released/IMEService-2.0.8.apk
+下载最新版本的APK包：https://github.com/abai569/TVRemoteIME/raw/master/released/IMEService-2.0.9.apk
 
 ## 一、通过adb命令安装应用  
 
