@@ -195,7 +195,7 @@
             <!-- Web Access（客户端输入，含二维码） -->
             <com.google.android.material.card.MaterialCardView
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:layout_marginStart="8dp"
                 style="@style/CardStyle">
@@ -204,52 +204,75 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:padding="8dp"
-                    android:gravity="center_horizontal">
+                    android:padding="8dp">
 
                     <TextView
                         style="@style/SectionTitle"
                         android:text="Web控制访问" />
 
-                    <ImageView
-                        android:id="@+id/ivQRCode"
-                        android:layout_width="200dp"
-                        android:layout_height="200dp"
-                        android:layout_marginTop="12dp"
-                        android:contentDescription="QR Code" />
-
-                    <TextView
-                        android:id="@+id/tvAddress"
+                    <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="12dp"
-                        android:text="http://192.168.1.100:9978"
-                        android:textColor="@color/md_theme_primary"
-                        android:textSize="16sp"
-                        android:textStyle="bold"
-                        android:gravity="center" />
+                        android:orientation="horizontal"
+                        android:gravity="top"
+                        android:layout_marginTop="12dp">
 
-                    <!-- Test Input -->
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="16dp"
-                        android:text="测试远程输入："
-                        style="@style/BodyText" />
-
-                    <com.google.android.material.textfield.TextInputLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="8dp"
-                        style="@style/TextInputStyle">
-
-                        <com.google.android.material.textfield.TextInputEditText
-                            android:layout_width="match_parent"
+                        <!-- 左：二维码 + 地址（居左） -->
+                        <LinearLayout
+                            android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:hint="在此输入测试文字"
-                            android:maxLines="2" />
+                            android:orientation="vertical">
 
-                    </com.google.android.material.textfield.TextInputLayout>
+                            <ImageView
+                                android:id="@+id/ivQRCode"
+                                android:layout_width="240dp"
+                                android:layout_height="240dp"
+                                android:contentDescription="QR Code" />
+
+                            <TextView
+                                android:id="@+id/tvAddress"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="8dp"
+                                android:text="http://192.168.1.100:9978"
+                                android:textColor="@color/md_theme_primary"
+                                android:textSize="15sp"
+                                android:textStyle="bold" />
+
+                        </LinearLayout>
+
+                        <!-- 右：测试远程输入（居右） -->
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:layout_marginStart="16dp"
+                            android:orientation="vertical"
+                            android:gravity="end">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="测试远程输入："
+                                style="@style/BodyText" />
+
+                            <com.google.android.material.textfield.TextInputLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="8dp"
+                                style="@style/TextInputStyle">
+
+                                <com.google.android.material.textfield.TextInputEditText
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:hint="在此输入测试文字"
+                                    android:maxLines="2" />
+
+                            </com.google.android.material.textfield.TextInputLayout>
+
+                        </LinearLayout>
+
+                    </LinearLayout>
 
                 </LinearLayout>
 
@@ -323,7 +346,7 @@
             <!-- DLNA -->
             <com.google.android.material.card.MaterialCardView
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:layout_marginStart="8dp"
                 style="@style/CardStyle">

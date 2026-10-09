@@ -1,6 +1,6 @@
 {
-    "versionCode": 27,
-    "versionName": "2.1.7",
-    "installAPK": "https://raw.githubusercontent.com/abai569/TVRemoteIME/master/released/IMEService-2.1.7.apk",
-    "message": "1.修复在线更新下载不完整导致安装报“未签名/解析失败”：下载完成后校验APK可解析，损坏文件自动换源重试。\n2.崩溃日志已全局记录（主界面/输入法服务/DLNA均覆盖），崩溃原因在下次启动弹窗显示，网页端/crashlog可查。"
+    "versionCode": 28,
+    "versionName": "2.1.8",
+    "installAPK": "https://raw.githubusercontent.com/abai569/TVRemoteIME/master/released/IMEService-2.1.8.apk",
+    "message": "1.主界面布局调整：两行卡片等高（以左侧卡片高度为准）；Web控制访问卡片内标题与二维码居左、测试远程输入框居右，二维码加大。"
 }
