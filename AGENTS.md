@@ -46,3 +46,8 @@
 16. **每次发布 Release 必须带更新说明（body）**：升级弹窗的“更新内容”取自 Release body，body 为空时用户只看到版本号、不知道改了什么。CI 发布完成后立即用 `gh api -X PATCH repos/abai569/TVRemoteIME/releases/{id} -f body=...` 补写说明（云端 gh 即可，无需 workflow scope）。
 17. 版本号同步**禁止用 sed 全局替换**（会把 readme 日志历史条目标题一并改掉、造成版本记录错乱）；只允许精确替换 build.gradle 的 versionCode/versionName 与各文件中的当前版本串。
 18. readme 更新日志只允许**在日志区头部插入新条目**，历史条目禁止改动。
+
+## 七、编译与发布审批（强制）
+
+20. **代码修改完成后，编译打包、构建 APK、创建 Release 发布等操作必须先经用户明确同意才能执行**；未获同意前只允许修改代码并提交推送到 master（不推发布 tag），不得触发 CI 发布、不得创建 Release。
+21. 用户确认同意后，方可执行 push 版本 tag → CI 构建签名 → 发布 Release 的完整流程。
