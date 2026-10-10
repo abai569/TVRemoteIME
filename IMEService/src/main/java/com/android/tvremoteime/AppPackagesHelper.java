@@ -153,7 +153,7 @@ public class AppPackagesHelper {
 
     public static void installPackage(final File apkFile, final Context context){
         // 参照 hongguotv：先确保“允许安装未知应用”已开启——TCL 等电视默认拦截安装，未授权时 ACTION_VIEW 会被静默吞掉
-        if(Build.VERSION.SDK_INT >= 26 && !context.getPackageManager().canRequestPackageInstalls()){
+        if(Build.VERSION.SDK_INT >= 26 && !canRequestInstalls(context)){
             try {
                 // 跳转“安装未知应用”设置页（hongguotv 同款入口），用户允许后再点安装
                 Intent grant = new Intent(Settings.ACTION_MANAGE_UNKNOWN_APP_SOURCES,
@@ -192,6 +192,16 @@ public class AppPackagesHelper {
         try {
             Environment.toastInHandler(context, "在线更新安装失败，请检查“未知来源”设置或手动安装 APK");
         }catch (Throwable ignored){}
+    }
+
+    /** 检查是否已授权“允许安装未知应用”；个别 ROM 缺权限/异常时按已授权处理，避免崩溃 */
+    private static boolean canRequestInstalls(Context context){
+        try {
+            return context.getPackageManager().canRequestPackageInstalls();
+        }catch (Throwable t){
+            Log.e(IMEService.TAG, "canRequestPackageInstalls 异常，按已授权处理", t);
+            return true;
+        }
     }
 
     /** PackageInstaller 兜底安装：不依赖系统安装器，TCL 等定制系统也可用（用户需在系统确认框按确认） */
