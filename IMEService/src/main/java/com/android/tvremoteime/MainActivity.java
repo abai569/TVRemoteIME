@@ -164,7 +164,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
             settings.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             this.startActivity(settings);
         }catch (Exception ignored2){ }
-        Environment.toast(getApplicationContext(), "抱歉，无法激活输入法，请手动前往设置→输入法设置，选择 " + getString(R.string.app_name));
+        Environment.toast(getApplicationContext(), "抱歉，无法激活输入法，请手动前往 设置→输入法，选择 " + getString(R.string.app_name));
     }
 
     private void openAccessibilitySettings() {
