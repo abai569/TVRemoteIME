@@ -8,6 +8,11 @@
 
 ## 更新日志（Fork 版本）
 
+### 2026-10 更新（v2.3.6）
+
+- 新增：一键启用并设为默认输入法——电视开启 ADB 后按提示在电脑执行一次授权命令，即可直接启用并设为默认，无需进系统设置
+- 修复：在线更新/网页端传送 APK 安装改用 PackageInstaller 优先，TCL 等电视不再出现“点了没反应、不弹安装界面”
+
 ### 2026-10 更新（v2.3.5）
 
 - 修复：TCL 等定制系统无输入法设置页时，激活按钮不再报“无法激活”，退回系统设置主页并提示：请手动前往 设置→输入法，选择 小盒精灵
@@ -199,7 +204,7 @@
 
 # 安装方法
 
-下载最新版本的APK包：https://github.com/abai569/TVRemoteIME/raw/master/released/IMEService-2.3.5.apk
+下载最新版本的APK包：https://github.com/abai569/TVRemoteIME/raw/master/released/IMEService-2.3.6.apk
 
 ## 一、通过adb命令安装应用  
 
