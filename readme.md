@@ -8,6 +8,11 @@
 
 ## 更新日志（Fork 版本）
 
+### 2026-10 更新（v2.3.7）
+
+- 修复：输入法设置卡内容被卡片高度裁剪（“手动启动”按钮下部分及提示文字被截断），卡片改为自适应高度并加底部留白，左右两卡同步加高等高
+- 修复：按钮统一加焦点属性，TV 遥控器可正常选中“一键启用并设为默认”按钮
+
 ### 2026-10 更新（v2.3.6）
 
 - 新增：一键启用并设为默认输入法——电视开启 ADB 后按提示在电脑执行一次授权命令，即可直接启用并设为默认，无需进系统设置
@@ -204,7 +209,7 @@
 
 # 安装方法
 
-下载最新版本的APK包：https://github.com/abai569/TVRemoteIME/raw/master/released/IMEService-2.3.6.apk
+下载最新版本的APK包：https://github.com/abai569/TVRemoteIME/raw/master/released/IMEService-2.3.7.apk
 
 ## 一、通过adb命令安装应用  
 
