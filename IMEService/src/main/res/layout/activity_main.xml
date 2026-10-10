@@ -199,7 +199,7 @@
                     android:paddingStart="8dp"
                     android:paddingEnd="8dp"
                     android:paddingTop="8dp"
-                    android:paddingBottom="16dp">
+                    android:paddingBottom="8dp">
 
                     <TextView
                         style="@style/SectionTitle"
@@ -248,23 +248,11 @@
                             android:id="@+id/btnSetIME"
                             style="@style/SecondaryButton"
                             android:layout_width="wrap_content"
-                            android:nextFocusDown="@id/btnOneClickIme"
+                            android:nextFocusUp="@id/btnUseIME"
+                            android:nextFocusDown="@id/btnStartService"
                             android:text="设置" />
 
                     </LinearLayout>
-
-                    <!-- One-click enable + default (needs ADB WRITE_SECURE_SETTINGS) -->
-                    <com.google.android.material.button.MaterialButton
-                        android:id="@+id/btnOneClickIme"
-                        style="@style/PrimaryButton"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="8dp"
-                        android:focusable="true"
-                        android:focusableInTouchMode="true"
-                        android:nextFocusUp="@id/btnSetIME"
-                        android:nextFocusDown="@id/btnStartService"
-                        android:text="一键启用并设为默认（需ADB授权）" />
 
                     <!-- Manual Start -->
                     <LinearLayout
@@ -285,10 +273,23 @@
                             android:id="@+id/btnStartService"
                             style="@style/PrimaryButton"
                             android:layout_width="wrap_content"
-                            android:nextFocusUp="@id/btnOneClickIme"
+                            android:nextFocusUp="@id/btnSetIME"
+                            android:nextFocusDown="@id/btnOneClickIme"
                             android:text="手动启动" />
 
                     </LinearLayout>
+
+                    <!-- One-click enable + default（置于卡片底部） -->
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btnOneClickIme"
+                        style="@style/PrimaryButton"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:focusable="true"
+                        android:focusableInTouchMode="true"
+                        android:nextFocusUp="@id/btnStartService"
+                        android:text="一键启用并设为默认（需ADB授权）" />
 
                 </LinearLayout>
 
