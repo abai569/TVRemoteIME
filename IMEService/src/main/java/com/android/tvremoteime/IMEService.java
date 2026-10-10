@@ -64,12 +64,22 @@ public class IMEService extends InputMethodService implements View.OnClickListen
 		//android.os.Debug.waitForDebugger();
 		Environment.initToastHandler();
 
-		RemoteServerFileManager.resetBaseDir(this);
-		startRemoteServer();
-		DLNAUtils.startDLNAService(this.getApplicationContext());
-		new AutoUpdateManager(this, this.handler);
-		//xllib.DownloadManager.instance().init(this);
-
+		// 重活（Web 服务器/DLNA/在线更新）全部放后台线程执行：
+		// 系统勾选/绑定输入法时有超时限制，onCreate 若耗时过长（如端口占用时服务器循环重试）会被判“输入法无法激活”（TCL 等电视系统尤其严格）。
+		new Thread(new Runnable() {
+			@Override
+			public void run() {
+				try {
+					RemoteServerFileManager.resetBaseDir(IMEService.this);
+					startRemoteServer();
+					DLNAUtils.startDLNAService(IMEService.this.getApplicationContext());
+					new AutoUpdateManager(IMEService.this, IMEService.this.handler);
+				} catch (Throwable t) {
+					Log.e(TAG, "IME 后台初始化失败", t);
+					try { CrashHandler.saveCrash(IMEService.this, t); } catch (Throwable ignored) {}
+				}
+			}
+		}, "tvremoteime-init").start();
 	}
 
 	@Override
