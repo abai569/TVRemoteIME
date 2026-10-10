@@ -4,10 +4,12 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
+import android.content.pm.PackageInstaller;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
+import android.app.PendingIntent;
 import android.provider.Settings;
 import android.util.Log;
 
@@ -15,6 +17,8 @@ import androidx.core.content.FileProvider;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.OutputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -147,6 +151,7 @@ public class AppPackagesHelper {
     }
 
     public static void installPackage(final File apkFile, final Context context){
+        // 方式1：ACTION_VIEW 调系统安装器（常规系统可用）
         try {
             // targetSdk>=24 时必须用 FileProvider 暴露 content:// URI，否则抛 FileUriExposedException
             Uri uri = FileProvider.getUriForFile(context, context.getPackageName() + ".fileprovider", apkFile);
@@ -157,9 +162,49 @@ public class AppPackagesHelper {
             intent.setDataAndType(uri, "application/vnd.android.package-archive");
             context.startActivity(intent);
             Log.i(IMEService.TAG, String.format("已安装应用包[%s]", apkFile.getName()));
+            return;
         }catch (Exception ex){
-            Log.e(IMEService.TAG, String.format("安装应用包[%s]出错", apkFile.getName()), ex);
+            Log.e(IMEService.TAG, String.format("安装应用包[%s]出错(ACTION_VIEW)", apkFile.getName()), ex);
         }
+        // 方式2：PackageInstaller 系统级安装（TCL 等电视系统无默认安装器/拦截 ACTION_VIEW 时可用，会弹系统确认框）
+        try {
+            if(installViaPackageInstaller(apkFile, context)){
+                return;
+            }
+        }catch (Exception ex){
+            Log.e(IMEService.TAG, String.format("安装应用包[%s]出错(PackageInstaller)", apkFile.getName()), ex);
+        }
+        // 全部失败：给用户可见反馈，不再静默
+        try {
+            Environment.toastInHandler(context, "在线更新安装失败，请检查“未知来源”设置或手动安装 APK");
+        }catch (Throwable ignored){}
+    }
+
+    /** PackageInstaller 兜底安装：不依赖系统安装器，TCL 等定制系统也可用（用户需在系统确认框按确认） */
+    private static boolean installViaPackageInstaller(final File apkFile, final Context context){
+        PackageManager pm = context.getPackageManager();
+        PackageInfo pi = pm.getPackageArchiveInfo(apkFile.getAbsolutePath(), PackageManager.GET_SIGNATURES);
+        if(pi == null || pi.packageName == null) return false;
+        PackageInstaller installer = pm.getPackageInstaller();
+        PackageInstaller.SessionParams params = new PackageInstaller.SessionParams(PackageInstaller.SessionParams.MODE_FULL_INSTALL);
+        params.setAppPackageName(pi.packageName);
+        int sessionId = installer.createSession(params);
+        PackageInstaller.Session session = installer.openSession(sessionId);
+        OutputStream out = session.openWrite("base.apk", 0, apkFile.length());
+        FileInputStream in = new FileInputStream(apkFile);
+        byte[] buf = new byte[65536];
+        int n;
+        while((n = in.read(buf)) > 0){
+            out.write(buf, 0, n);
+        }
+        in.close();
+        out.close();
+        // 提交安装，系统弹确认框；结果广播无接收者也无害
+        Intent resultIntent = new Intent("com.android.tvremoteime.INSTALL_RESULT");
+        PendingIntent pending = PendingIntent.getBroadcast(context, 0, resultIntent,
+                PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
+        session.commit(pending.getIntentSender());
+        return true;
     }
 
     public static void uninstallPackage(final String packageName, final Context context){
