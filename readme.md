@@ -8,6 +8,10 @@
 
 ## 更新日志（Fork 版本）
 
+### 2026-10 更新（v2.3.3）
+
+- QQ 交流群：1109483648 固定显示在屏幕底部（不再随内容滚动），居中、小号字
+
 ### 2026-10 更新（v2.3.2）
 
 - 网页端（Web 控制页）底部新增 QQ 交流群：1109483648，点击群号可一键复制
@@ -186,7 +190,7 @@
 
 # 安装方法
 
-下载最新版本的APK包：https://github.com/abai569/TVRemoteIME/raw/master/released/IMEService-2.3.2.apk
+下载最新版本的APK包：https://github.com/abai569/TVRemoteIME/raw/master/released/IMEService-2.3.3.apk
 
 ## 一、通过adb命令安装应用  
 

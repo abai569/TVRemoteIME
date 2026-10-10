@@ -1,14 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/md_theme_background"
-    android:fillViewport="true"
-    android:focusable="false"
-    android:focusableInTouchMode="false"
-    tools:context="com.android.tvremoteime.MainActivity">
+    android:orientation="vertical"
+    android:background="@color/md_theme_background">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:fillViewport="true"
+        android:focusable="false"
+        android:focusableInTouchMode="false"
+        tools:context="com.android.tvremoteime.MainActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -394,18 +400,20 @@
 
             </com.google.android.material.card.MaterialCardView>
 
-            <!-- QQ 交流群（底部居中，小号字） -->
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="6dp"
-                android:gravity="center"
-                android:text="QQ交流群：1109483648"
-                android:textColor="#80606060"
-                android:textSize="12sp" />
-
         </LinearLayout>
-
     </LinearLayout>
 
-</ScrollView>
+    </ScrollView>
+
+    <!-- QQ 交流群（固定屏幕底部，居中，小号字） -->
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:paddingBottom="8dp"
+        android:gravity="center"
+        android:text="QQ交流群：1109483648"
+        android:textColor="#80606060"
+        android:textSize="12sp" />
+
+</LinearLayout>
