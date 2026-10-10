@@ -8,6 +8,10 @@
 
 ## 更新日志（Fork 版本）
 
+### 2026-10 更新（v2.4.3）
+
+- 恢复 2.4.1 代码状态（回退网页端进度条改动），版本号升级——供已装 2.4.2 的设备在线更新回干净版本
+
 ### 2026-10 更新（v2.4.1）
 
 - 修复：启动崩溃（SecurityException）——声明 android.permission.REQUEST_INSTALL_PACKAGES 权限；canRequestPackageInstalls 增加异常防御，个别 ROM 异常时按已授权处理不再崩溃
@@ -226,7 +230,7 @@
 
 # 安装方法
 
-下载最新版本的APK包：https://github.com/abai569/TVRemoteIME/raw/master/released/IMEService-2.4.1.apk
+下载最新版本的APK包：https://github.com/abai569/TVRemoteIME/raw/master/released/IMEService-2.4.3.apk
 
 ## 一、通过adb命令安装应用  
 
