@@ -99,10 +99,10 @@
             android:gravity="top"
             android:weightSum="2">
 
-            <!-- Web Access（二维码卡片，居左；wrap_content 以包住二维码，避免底部被截） -->
+            <!-- Web Access（二维码卡片，居左；match_parent 跟随右卡等高，避免两卡高度不齐） -->
             <com.google.android.material.card.MaterialCardView
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:layout_marginEnd="8dp"
                 style="@style/CardStyle">
@@ -184,10 +184,10 @@
 
             </com.google.android.material.card.MaterialCardView>
 
-            <!-- IME Setup（match_parent 与左侧二维码卡等高） -->
+            <!-- IME Setup（wrap_content 内容完整显示，左卡 match_parent 跟随本卡等高） -->
             <com.google.android.material.card.MaterialCardView
                 android:layout_width="0dp"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:layout_marginStart="8dp"
                 style="@style/CardStyle">
@@ -255,6 +255,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="8dp"
+                        android:focusable="true"
+                        android:focusableInTouchMode="true"
                         android:text="一键启用并设为默认（需ADB授权）" />
 
                     <!-- Manual Start -->
