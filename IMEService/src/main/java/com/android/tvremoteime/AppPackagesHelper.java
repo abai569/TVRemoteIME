@@ -151,7 +151,16 @@ public class AppPackagesHelper {
     }
 
     public static void installPackage(final File apkFile, final Context context){
-        // 方式1：ACTION_VIEW 调系统安装器（常规系统可用）
+        // 方式1：PackageInstaller 系统级安装优先——TCL 等电视系统 ACTION_VIEW 可能“半成功”（不抛异常但不弹安装界面），
+        // PackageInstaller 不依赖系统安装器，电视上更可靠；常规系统同样弹系统确认框
+        try {
+            if(installViaPackageInstaller(apkFile, context)){
+                return;
+            }
+        }catch (Exception ex){
+            Log.e(IMEService.TAG, String.format("安装应用包[%s]出错(PackageInstaller)", apkFile.getName()), ex);
+        }
+        // 方式2：ACTION_VIEW 调系统安装器（兜底，部分系统 PackageInstaller 不可用）
         try {
             // targetSdk>=24 时必须用 FileProvider 暴露 content:// URI，否则抛 FileUriExposedException
             Uri uri = FileProvider.getUriForFile(context, context.getPackageName() + ".fileprovider", apkFile);
@@ -165,14 +174,6 @@ public class AppPackagesHelper {
             return;
         }catch (Exception ex){
             Log.e(IMEService.TAG, String.format("安装应用包[%s]出错(ACTION_VIEW)", apkFile.getName()), ex);
-        }
-        // 方式2：PackageInstaller 系统级安装（TCL 等电视系统无默认安装器/拦截 ACTION_VIEW 时可用，会弹系统确认框）
-        try {
-            if(installViaPackageInstaller(apkFile, context)){
-                return;
-            }
-        }catch (Exception ex){
-            Log.e(IMEService.TAG, String.format("安装应用包[%s]出错(PackageInstaller)", apkFile.getName()), ex);
         }
         // 全部失败：给用户可见反馈，不再静默
         try {
