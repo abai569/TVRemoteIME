@@ -8,6 +8,11 @@
 
 ## 更新日志（Fork 版本）
 
+### 2026-10 更新（v2.3.5）
+
+- 修复：TCL 等定制系统无输入法设置页时，激活按钮不再报“无法激活”，退回系统设置主页并提示：请手动前往 设置→输入法，选择 小盒精灵
+- 修复：更新安装被系统安装器拦截时，自动改用 PackageInstaller 系统级安装；全部失败时给出可见提示
+
 ### 2026-10 更新（v2.3.4）
 
 - 修复：TCL 等电视系统勾选启用输入法时报“输入法无法激活”（绑定超时）——IME 初始化（Web 服务器/DLNA/在线更新）改为后台线程执行，不阻塞系统绑定
@@ -194,7 +199,7 @@
 
 # 安装方法
 
-下载最新版本的APK包：https://github.com/abai569/TVRemoteIME/raw/master/released/IMEService-2.3.4.apk
+下载最新版本的APK包：https://github.com/abai569/TVRemoteIME/raw/master/released/IMEService-2.3.5.apk
 
 ## 一、通过adb命令安装应用  
 
