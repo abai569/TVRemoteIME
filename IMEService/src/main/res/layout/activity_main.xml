@@ -248,6 +248,15 @@
 
                     </LinearLayout>
 
+                    <!-- One-click enable + default (needs ADB WRITE_SECURE_SETTINGS) -->
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btnOneClickIme"
+                        style="@style/PrimaryButton"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:text="一键启用并设为默认（需ADB授权）" />
+
                     <!-- Manual Start -->
                     <LinearLayout
                         android:layout_width="match_parent"

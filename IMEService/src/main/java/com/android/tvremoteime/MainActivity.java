@@ -1,9 +1,11 @@
 package com.android.tvremoteime;
 
 import android.app.Activity;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -13,6 +15,7 @@ import android.provider.Settings;
 import android.text.TextUtils;
 import android.view.View;
 import android.util.Log;
+import android.view.inputmethod.InputMethodInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
@@ -24,7 +27,14 @@ import com.android.tvremoteime.adb.AdbHelper;
 import com.android.tvremoteime.mouse.MouseAccessibilityService;
 import com.zxt.dlna.dmr.ZxtMediaRenderer;
 
+import java.net.InetAddress;
+import java.net.NetworkInterface;
+import java.util.Enumeration;
+import java.util.List;
+
 public class MainActivity extends Activity implements View.OnClickListener {
+
+    private static final String TAG = "MainActivity";
 
     private ImageView qrCodeImage;
     private TextView addressView;
@@ -72,6 +82,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
         // 设置按钮点击监听器
         findViewById(R.id.btnUseIME).setOnClickListener(this);
         findViewById(R.id.btnSetIME).setOnClickListener(this);
+        findViewById(R.id.btnOneClickIme).setOnClickListener(this);
         findViewById(R.id.btnStartService).setOnClickListener(this);
         findViewById(R.id.btnSetDLNA).setOnClickListener(this);
         findViewById(R.id.btnCheckUpdate).setOnClickListener(this);
@@ -117,6 +128,8 @@ public class MainActivity extends Activity implements View.OnClickListener {
             if(Environment.isDefaultIME(this)){
                 Environment.toast(getApplicationContext(), "太棒了，" + getString(R.string.keyboard_name) +"已是系统默认输入法！");
             }
+        } else if (id == R.id.btnOneClickIme) {
+            oneClickEnableIme();
         } else if (id == R.id.btnStartService) {
             // 使用显式Intent启动服务 (Android 5.0+要求)
             startService(new Intent(this, IMEService.class));
@@ -165,6 +178,86 @@ public class MainActivity extends Activity implements View.OnClickListener {
             this.startActivity(settings);
         }catch (Exception ignored2){ }
         Environment.toast(getApplicationContext(), "抱歉，无法激活输入法，请手动前往 设置→输入法，选择 " + getString(R.string.app_name));
+    }
+
+    /** 一键启用并设为默认：需 WRITE_SECURE_SETTINGS（ADB 授权一次）；未授权时弹引导 */
+    private void oneClickEnableIme(){
+        if(getPackageManager().checkPermission("android.permission.WRITE_SECURE_SETTINGS", getPackageName()) != PackageManager.PERMISSION_GRANTED){
+            showAdbGrantDialog();
+            return;
+        }
+        boolean ok = enableAndSetDefaultIme();
+        if(ok){
+            Environment.toast(getApplicationContext(), "已启用并设为默认输入法：" + getString(R.string.keyboard_name));
+        }else{
+            Environment.toast(getApplicationContext(), "设置失败，请手动前往 设置→输入法 选择 " + getString(R.string.app_name));
+        }
+    }
+
+    /** 写入 ENABLED_INPUT_METHODS + DEFAULT_INPUT_METHOD，并回读验证 */
+    private boolean enableAndSetDefaultIme(){
+        try {
+            InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+            List<InputMethodInfo> imes = imm.getInputMethodList();
+            String imeId = null;
+            for(InputMethodInfo info : imes){
+                if(info.getPackageName().equals(getPackageName())){
+                    imeId = info.getId();
+                    break;
+                }
+            }
+            if(imeId == null) return false;
+            ContentResolver cr = getContentResolver();
+            String enabled = Settings.Secure.getString(cr, Settings.Secure.ENABLED_INPUT_METHODS);
+            if(enabled == null) enabled = "";
+            if(!enabled.contains(imeId)){
+                enabled = enabled.trim().isEmpty() ? imeId : enabled + ":" + imeId;
+                Settings.Secure.putString(cr, Settings.Secure.ENABLED_INPUT_METHODS, enabled);
+            }
+            Settings.Secure.putString(cr, Settings.Secure.DEFAULT_INPUT_METHOD, imeId);
+            return imeId.equals(Settings.Secure.getString(cr, Settings.Secure.DEFAULT_INPUT_METHOD));
+        } catch (Exception e){
+            Log.e(TAG, "enableAndSetDefaultIme", e);
+            return false;
+        }
+    }
+
+    /** 未授权 WRITE_SECURE_SETTINGS 时的 ADB 授权引导（显示电视 IP + 电脑端命令） */
+    private void showAdbGrantDialog(){
+        try {
+            String ip = getLocalIpAddress();
+            String cmd = "adb connect " + ip + ":5555\r\nadb shell pm grant " + getPackageName() + " android.permission.WRITE_SECURE_SETTINGS";
+            new android.app.AlertDialog.Builder(this)
+                    .setTitle("需要一次 ADB 授权")
+                    .setMessage("电视已开启 ADB 时，在电脑上执行：\r\n\r\n" + cmd + "\r\n\r\n授权完成后，再点一次“一键启用并设为默认”，即可直接启用并设为默认输入法，无需进系统设置。")
+                    .setPositiveButton("知道了", null)
+                    .setCancelable(true)
+                    .show();
+        } catch (Exception e){
+            Log.e(TAG, "showAdbGrantDialog", e);
+        }
+    }
+
+    /** 获取本机（电视）局域网 IPv4，用于 adb connect */
+    private String getLocalIpAddress(){
+        try {
+            Enumeration<NetworkInterface> nis = NetworkInterface.getNetworkInterfaces();
+            while(nis != null && nis.hasMoreElements()){
+                NetworkInterface ni = nis.nextElement();
+                if(ni.isLoopback() || !ni.isUp()) continue;
+                Enumeration<InetAddress> addrs = ni.getInetAddresses();
+                while(addrs.hasMoreElements()){
+                    InetAddress addr = addrs.nextElement();
+                    String host = addr.getHostAddress();
+                    if(!addr.isLoopbackAddress() && host != null && host.contains(".")){
+                        return host;
+                    }
+                }
+            }
+        } catch (Exception e){
+            Log.e(TAG, "getLocalIpAddress", e);
+        }
+        return "192.168.x.x";
     }
 
     private void openAccessibilitySettings() {
