@@ -10,6 +10,7 @@ import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.app.PendingIntent;
+import android.os.Build;
 import android.provider.Settings;
 import android.util.Log;
 
@@ -151,29 +152,41 @@ public class AppPackagesHelper {
     }
 
     public static void installPackage(final File apkFile, final Context context){
-        // 方式1：PackageInstaller 系统级安装优先——TCL 等电视系统 ACTION_VIEW 可能“半成功”（不抛异常但不弹安装界面），
-        // PackageInstaller 不依赖系统安装器，电视上更可靠；常规系统同样弹系统确认框
+        // 参照 hongguotv：先确保“允许安装未知应用”已开启——TCL 等电视默认拦截安装，未授权时 ACTION_VIEW 会被静默吞掉
+        if(Build.VERSION.SDK_INT >= 26 && !context.getPackageManager().canRequestPackageInstalls()){
+            try {
+                // 跳转“安装未知应用”设置页（hongguotv 同款入口），用户允许后再点安装
+                Intent grant = new Intent(Settings.ACTION_MANAGE_UNKNOWN_APP_SOURCES,
+                        Uri.parse("package:" + context.getPackageName()));
+                grant.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                context.startActivity(grant);
+                Environment.toastInHandler(context, "请先允许“安装未知来源应用”，再点“马上更新”安装");
+                return;
+            }catch (Exception ex){
+                Log.e(IMEService.TAG, String.format("跳转未知来源设置失败[%s]", apkFile.getName()), ex);
+            }
+        }
+        // 方式1：ACTION_VIEW 调系统安装器（hongguotv 同款，授权后可正常弹系统安装确认框）
+        try {
+            // targetSdk>=24 时必须用 FileProvider 暴露 content:// URI，否则抛 FileUriExposedException
+            Uri uri = FileProvider.getUriForFile(context, context.getPackageName() + ".fileprovider", apkFile);
+            Intent intent = new Intent(Intent.ACTION_VIEW);
+            intent.setDataAndType(uri, "application/vnd.android.package-archive");
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+            context.startActivity(intent);
+            Log.i(IMEService.TAG, String.format("已安装应用包[%s]", apkFile.getName()));
+            return;
+        }catch (Exception ex){
+            Log.e(IMEService.TAG, String.format("安装应用包[%s]出错(ACTION_VIEW)", apkFile.getName()), ex);
+        }
+        // 方式2：PackageInstaller 系统级安装（不依赖系统安装器）
         try {
             if(installViaPackageInstaller(apkFile, context)){
                 return;
             }
         }catch (Exception ex){
             Log.e(IMEService.TAG, String.format("安装应用包[%s]出错(PackageInstaller)", apkFile.getName()), ex);
-        }
-        // 方式2：ACTION_VIEW 调系统安装器（兜底，部分系统 PackageInstaller 不可用）
-        try {
-            // targetSdk>=24 时必须用 FileProvider 暴露 content:// URI，否则抛 FileUriExposedException
-            Uri uri = FileProvider.getUriForFile(context, context.getPackageName() + ".fileprovider", apkFile);
-            Intent intent = new Intent();
-            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-            intent.setAction(Intent.ACTION_VIEW);
-            intent.setDataAndType(uri, "application/vnd.android.package-archive");
-            context.startActivity(intent);
-            Log.i(IMEService.TAG, String.format("已安装应用包[%s]", apkFile.getName()));
-            return;
-        }catch (Exception ex){
-            Log.e(IMEService.TAG, String.format("安装应用包[%s]出错(ACTION_VIEW)", apkFile.getName()), ex);
         }
         // 全部失败：给用户可见反馈，不再静默
         try {
