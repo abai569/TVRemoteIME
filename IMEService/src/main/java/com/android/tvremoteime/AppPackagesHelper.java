@@ -181,7 +181,7 @@ public class AppPackagesHelper {
     }
 
     /** PackageInstaller 兜底安装：不依赖系统安装器，TCL 等定制系统也可用（用户需在系统确认框按确认） */
-    private static boolean installViaPackageInstaller(final File apkFile, final Context context){
+    private static boolean installViaPackageInstaller(final File apkFile, final Context context) throws Exception {
         PackageManager pm = context.getPackageManager();
         PackageInfo pi = pm.getPackageArchiveInfo(apkFile.getAbsolutePath(), PackageManager.GET_SIGNATURES);
         if(pi == null || pi.packageName == null) return false;
