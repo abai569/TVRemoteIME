@@ -8,6 +8,10 @@
 
 ## 更新日志（Fork 版本）
 
+### 2026-10 更新（v2.3.9）
+
+- 修复：在线更新/网页端传送 APK 安装前先检查“允许安装未知应用”，未开启时自动跳转系统授权页引导（参照 hongguotv 方案），授权后 TCL 等电视可正常弹出系统安装确认框；PackageInstaller 保留兜底
+
 ### 2026-10 更新（v2.3.8）
 
 - 调整：“一键启用并设为默认”按钮移到输入法设置卡底部，遥控器焦点顺序固定为 设置→手动启动→一键启用（不再被跳过）
@@ -214,7 +218,7 @@
 
 # 安装方法
 
-下载最新版本的APK包：https://github.com/abai569/TVRemoteIME/raw/master/released/IMEService-2.3.8.apk
+下载最新版本的APK包：https://github.com/abai569/TVRemoteIME/raw/master/released/IMEService-2.3.9.apk
 
 ## 一、通过adb命令安装应用  
 
