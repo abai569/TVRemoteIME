@@ -98,8 +98,8 @@
     <style name="PrimaryButton" parent="Widget.MaterialComponents.Button">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="backgroundTint">@color/md_theme_primary</item>
-        <item name="android:textColor">@color/md_theme_onPrimary</item>
+        <item name="backgroundTint">@color/btn_primary_bg</item>
+        <item name="android:textColor">@color/btn_primary_text</item>
         <item name="cornerRadius">8dp</item>
         <item name="android:paddingStart">24dp</item>
         <item name="android:paddingEnd">24dp</item>
@@ -113,7 +113,8 @@
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="strokeColor">@color/md_theme_primary</item>
-        <item name="android:textColor">@color/md_theme_primary</item>
+        <item name="android:textColor">@color/btn_secondary_text</item>
+        <item name="backgroundTint">@color/btn_secondary_bg</item>
         <item name="cornerRadius">8dp</item>
         <item name="android:paddingStart">24dp</item>
         <item name="android:paddingEnd">24dp</item>

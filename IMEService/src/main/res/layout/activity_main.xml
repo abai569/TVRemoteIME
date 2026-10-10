@@ -224,6 +224,7 @@
                             android:id="@+id/btnUseIME"
                             style="@style/SecondaryButton"
                             android:layout_width="wrap_content"
+                            android:nextFocusDown="@id/btnSetIME"
                             android:text="设置" />
 
                     </LinearLayout>
@@ -247,6 +248,7 @@
                             android:id="@+id/btnSetIME"
                             style="@style/SecondaryButton"
                             android:layout_width="wrap_content"
+                            android:nextFocusDown="@id/btnOneClickIme"
                             android:text="设置" />
 
                     </LinearLayout>
@@ -260,6 +262,8 @@
                         android:layout_marginTop="8dp"
                         android:focusable="true"
                         android:focusableInTouchMode="true"
+                        android:nextFocusUp="@id/btnSetIME"
+                        android:nextFocusDown="@id/btnStartService"
                         android:text="一键启用并设为默认（需ADB授权）" />
 
                     <!-- Manual Start -->
@@ -281,17 +285,10 @@
                             android:id="@+id/btnStartService"
                             style="@style/PrimaryButton"
                             android:layout_width="wrap_content"
+                            android:nextFocusUp="@id/btnOneClickIme"
                             android:text="手动启动" />
 
                     </LinearLayout>
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="8dp"
-                        android:text="手动启动后需开启ADB模式才能使用远程输入及遥控功能"
-                        android:textColor="@color/md_theme_onSecondaryContainer"
-                        android:textSize="12sp" />
 
                 </LinearLayout>
 
