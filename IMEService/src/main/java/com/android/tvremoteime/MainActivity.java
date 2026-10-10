@@ -158,15 +158,13 @@ public class MainActivity extends Activity implements View.OnClickListener {
             this.startActivityForResult(new Intent(Settings.ACTION_INPUT_METHOD_SETTINGS), 0);
             return;
         }catch (Exception ignored){ }
-        // TCL 等定制系统未注册“输入法设置”页面：退回系统设置主页，引导手动进入“输入法/键盘”设置
+        // TCL 等定制系统未注册“输入法设置”页面：能打开系统设置主页就打开（辅助），提示语统一指引手动操作
         try {
             Intent settings = new Intent(Settings.ACTION_SETTINGS);
             settings.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             this.startActivity(settings);
-            Environment.toast(getApplicationContext(), "请在系统设置中手动找到\"输入法/键盘\"，启用" + getString(R.string.app_name));
-        }catch (Exception ignored2){
-            Environment.toast(getApplicationContext(), "抱歉，无法激活启用输入法，请手动启动服务！");
-        }
+        }catch (Exception ignored2){ }
+        Environment.toast(getApplicationContext(), "抱歉，无法激活输入法，请手动前往设置→输入法设置，选择 " + getString(R.string.app_name));
     }
 
     private void openAccessibilitySettings() {
