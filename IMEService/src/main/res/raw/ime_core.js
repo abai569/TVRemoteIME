@@ -435,15 +435,44 @@ $("#upfile,#upfileApk,#upfile2,#upfile3").change(function() {
 	var formData = new FormData;
 	var file = this.files[0];
 	var processbar = null;
+	var progressText = null;
+	var progressResetTimer = null;
 	if(id == "upfile2"){
 		formData.append("path", curPath);
-		processbar = processbar2;
+		processbar = $("#processbar2");
+		progressText = $("#progressText2");
 	}else if(id == "upfile" || id == "upfileApk"){
 		formData.append("autoInstall", $('#cbAutoInstall')[0].checked);
 		formData.append("useSystem", $('#playUseSystem')[0].checked);
-		processbar = id == "upfileApk" ? processbarApk : processbar1;
+		processbar = id == "upfileApk" ? $("#processbarApk") : $("#processbar1");
+		progressText = id == "upfileApk" ? $("#progressTextApk") : $("#progressText1");
+	}
+	if(!file){
+		return;
 	}
 	formData.append("file", file, encodeURI(file.uploadName || file.name));
+	function setProgressState(state, percent, text) {
+		if(!processbar){
+			return;
+		}
+		var progressBar = processbar.closest(".progress-bar");
+		progressBar.removeClass("is-active is-success is-error");
+		if(state){
+			progressBar.addClass("is-" + state);
+		}
+		if(state == "active"){
+			progressBar.addClass("is-active");
+		}
+		processbar.css("width", percent + "%");
+		progressText.text(text || "");
+	}
+	function resetProgressState() {
+		if(!processbar){
+			return;
+		}
+		setProgressState("", 0, "");
+		clearTimeout(progressResetTimer);
+	}
 	$.ajax({
 		type: "POST",
 		url: id == "upfile2" ? "/file/upload" : (id == "upfile3" ? "/torrent/upload" : "/upload"),
@@ -455,25 +484,20 @@ $("#upfile,#upfileApk,#upfile2,#upfile3").change(function() {
 			var xhr = $.ajaxSettings.xhr();
 			if(xhr.upload){
 				xhr.upload.addEventListener("progress", function(e) {
-					if(processbar){
-						var p = Math.floor(100 * e.loaded / e.total) + "%";
-						processbar.css({
-							width: p
-						}).text(p);
+					if(e.lengthComputable){
+						var percent = Math.min(100, Math.floor(100 * e.loaded / e.total));
+						setProgressState("active", percent, percent + "%");
 					}
 				}, false);
 			}
 			return xhr;
 		},
 		beforeSend: function() {
-			if(processbar){
-				processbar.css({
-					width: "1%"
-				}).text("")
-			}
+			setProgressState("active", 0, "上传中");
 		},
 		success: function(data) {
 			if(data.success){
+				setProgressState("success", 100, "上传完成");
 				if(id == "upfile2"){
 					loadFileList(curPath);
 					alert("文件已成功上传到当前目录。");
@@ -488,17 +512,14 @@ $("#upfile,#upfileApk,#upfile2,#upfile3").change(function() {
 					}
 				}
 			}else{
+				setProgressState("error", 100, "上传失败");
 				alert("抱歉，文件上传失败！");
 			}
 		},
 		complete: function() {
-			// 上传结束（成功或失败）后重置状态：清空文件选择框，进度条归零，保证可再次传送
+			// 保留结果短暂可见，避免上传完成后进度条瞬间归零。
 			$("#" + id).val("");
-			if(processbar){
-				processbar.css({
-					width: "0%"
-				}).text("");
-			}
+			progressResetTimer = setTimeout(resetProgressState, 2000);
 		}
 	});
 });

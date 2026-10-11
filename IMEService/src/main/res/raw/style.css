@@ -593,6 +593,27 @@ body {
 	display: flex;
 	align-items: center;
 	justify-content: center;
+	transition: background-color var(--transition-fast), opacity var(--transition-fast);
+}
+
+.progress-bar:not(.is-active) {
+	opacity: 0.65;
+}
+
+.progress-bar.is-success {
+	background: #d9f4df;
+}
+
+.progress-bar.is-success .progress-fill {
+	background: #2e9d50;
+}
+
+.progress-bar.is-error {
+	background: #f9dddd;
+}
+
+.progress-bar.is-error .progress-fill {
+	background: #c93c3c;
 }
 
 .progress-bar.compact {
@@ -604,6 +625,7 @@ body {
 	height: 100%;
 	background: linear-gradient(90deg, var(--color-primary) 0%, var(--color-accent) 100%);
 	transition: width var(--transition-normal);
+	min-width: 0;
 }
 
 .progress-text {
