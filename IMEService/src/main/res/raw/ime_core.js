@@ -436,7 +436,6 @@ $("#upfile,#upfileApk,#upfile2,#upfile3").change(function() {
 	var file = this.files[0];
 	var processbar = null;
 	var progressText = null;
-	var progressResetTimer = null;
 	if(id == "upfile2"){
 		formData.append("path", curPath);
 		processbar = $("#processbar2");
@@ -452,26 +451,40 @@ $("#upfile,#upfileApk,#upfile2,#upfile3").change(function() {
 	}
 	formData.append("file", file, encodeURI(file.uploadName || file.name));
 	function setProgressState(state, percent, text) {
-		if(!processbar){
+		if(!processbar || !progressText){
 			return;
 		}
 		var progressBar = processbar.closest(".progress-bar");
-		progressBar.removeClass("is-active is-success is-error");
-		if(state){
-			progressBar.addClass("is-" + state);
-		}
+		progressBar.removeClass("is-success is-error");
+		progressText.removeClass("is-active is-success is-error");
 		if(state == "active"){
-			progressBar.addClass("is-active");
+			progressText.addClass("is-active");
+		}else if(state == "success" || state == "error"){
+			progressBar.addClass("is-" + state);
+			progressText.addClass("is-" + state);
 		}
 		processbar.css("width", percent + "%");
 		progressText.text(text || "");
 	}
-	function resetProgressState() {
+	function clearResetTimer() {
 		if(!processbar){
 			return;
 		}
-		setProgressState("", 0, "");
-		clearTimeout(progressResetTimer);
+		var timer = processbar.data("resetTimer");
+		if(timer){
+			clearTimeout(timer);
+			processbar.removeData("resetTimer");
+		}
+	}
+	function scheduleReset() {
+		if(!processbar){
+			return;
+		}
+		clearResetTimer();
+		processbar.data("resetTimer", setTimeout(function() {
+			processbar.removeData("resetTimer");
+			setProgressState("", 0, "准备上传");
+		}, 2000));
 	}
 	$.ajax({
 		type: "POST",
@@ -493,7 +506,8 @@ $("#upfile,#upfileApk,#upfile2,#upfile3").change(function() {
 			return xhr;
 		},
 		beforeSend: function() {
-			setProgressState("active", 0, "上传中");
+			clearResetTimer();
+			setProgressState("active", 0, "0%");
 		},
 		success: function(data) {
 			if(data.success){
@@ -516,10 +530,13 @@ $("#upfile,#upfileApk,#upfile2,#upfile3").change(function() {
 				alert("抱歉，文件上传失败！");
 			}
 		},
+		error: function() {
+			setProgressState("error", 100, "上传失败");
+		},
 		complete: function() {
-			// 保留结果短暂可见，避免上传完成后进度条瞬间归零。
+			// 结果状态保留 2 秒再回到"准备上传"，期间可清楚看到成败。
 			$("#" + id).val("");
-			progressResetTimer = setTimeout(resetProgressState, 2000);
+			scheduleReset();
 		}
 	});
 });

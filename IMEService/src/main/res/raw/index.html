@@ -87,9 +87,11 @@
 				<div class="upload-wrapper">
 					<input type="file" id="upfile" value=".." aria-label="选择文件">
 				    <button type="button" class="btn-primary upload-btn" id="btnUpload">传送文件</button>
-					<div class="progress-bar">
-					    <div class="progress-fill" id="processbar1"></div>
-					    <span class="progress-text" id="progressText1" aria-live="polite"></span>
+					<div class="progress-wrap">
+						<div class="progress-bar">
+							<div class="progress-fill" id="processbar1"></div>
+						</div>
+						<span class="progress-text" id="progressText1" aria-live="polite">准备上传</span>
 					</div>
 				    <button type="button" class="btn-danger upload-btn" id="btnClear">清除缓存</button>
 				</div>
@@ -164,9 +166,11 @@
 				<div class="upload-wrapper">
 					<input type="file" id="upfileApk" value=".." aria-label="选择APK文件">
 				    <button type="button" class="btn-primary upload-btn" id="btnUploadApk">上传APK</button>
-					<div class="progress-bar">
-					    <div class="progress-fill" id="processbarApk"></div>
-					    <span class="progress-text" id="progressTextApk" aria-live="polite"></span>
+					<div class="progress-wrap">
+						<div class="progress-bar">
+							<div class="progress-fill" id="processbarApk"></div>
+						</div>
+						<span class="progress-text" id="progressTextApk" aria-live="polite">准备上传</span>
 					</div>
 				</div>
 			</section>
@@ -179,9 +183,11 @@
 					<div class="file-upload">
 						<input type="file" id="upfile2" value=".." aria-label="选择文件">
 						<button type="button" class="btn-primary" id="btnUpload2">上传文件</button>
-						<div class="progress-bar compact">
-							<div class="progress-fill" id="processbar2"></div>
-							<span class="progress-text" id="progressText2" aria-live="polite"></span>
+						<div class="progress-wrap">
+							<div class="progress-bar compact">
+								<div class="progress-fill" id="processbar2"></div>
+							</div>
+							<span class="progress-text" id="progressText2" aria-live="polite">准备上传</span>
 						</div>
 					</div>
 					<label class="checkbox-label">
