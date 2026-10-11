@@ -8,6 +8,10 @@
 
 ## 更新日志（Fork 版本）
 
+### 2026-10 更新（v2.4.5）
+
+- 修复：网页端上传进度条不可见——重新设计进度条，状态文字移到条外侧保证可读，空闲显示"准备上传"，槽加内描边，完成/失败状态保留约 2 秒后自动恢复
+
 ### 2026-10 更新（v2.4.4）
 
 - 优化：网页端文件传送、APK 上传和文件管理上传进度条，上传中显示实时进度，完成或失败状态保留约 2 秒后自动恢复
@@ -234,7 +238,7 @@
 
 # 安装方法
 
-下载最新版本的APK包：https://github.com/abai569/TVRemoteIME/releases/download/2.4.4/IMEService-2.4.4.apk
+下载最新版本的APK包：https://github.com/abai569/TVRemoteIME/releases/download/2.4.5/IMEService-2.4.5.apk
 
 ## 一、通过adb命令安装应用  
 
