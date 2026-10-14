@@ -258,6 +258,74 @@ $("#confirm").on("click",function(){
 		});
 	}
 })
+
+// ==================== 电视剪贴板（电视 → 手机） ====================
+// 完整内容：输入框可能被【输入】清空，点【复制到手机】时要用这里的完整版
+var lastClipText = "";
+
+function setClipStatus(msg, cls){
+	var $s = $("#clipStatus");
+	$s.removeClass("ok err");
+	if(cls) $s.addClass(cls);
+	$s.text("剪贴板：" + msg);
+}
+
+function readTvClipboard(){
+	setClipStatus("读取中...", "");
+	$.get("/clipboard", function(res){
+		var st = res && res.status;
+		if("ok" == st){
+			lastClipText = res.text || "";
+			var $input = $("#inputarea");
+			if("" != $input.val() && !confirm("输入框已有内容，是否用电视剪贴板的内容覆盖？")){
+				setClipStatus("已读取 " + lastClipText.length + " 字（未覆盖输入框）", "ok");
+				return;
+			}
+			$input.val(lastClipText);
+			setClipStatus("已读取 " + lastClipText.length + " 字", "ok");
+		}else if("empty" == st){
+			lastClipText = "";
+			setClipStatus("电视剪贴板为空", "");
+		}else if("not_default_ime" == st){
+			lastClipText = "";
+			setClipStatus("需先把小盒精灵设为默认输入法", "err");
+		}else{
+			lastClipText = "";
+			setClipStatus("读取失败", "err");
+		}
+	}).fail(function(){
+		setClipStatus("网络错误，请检查与电视的连接", "err");
+	});
+}
+
+// http 页面属非安全上下文，navigator.clipboard 不可用，沿用站内 copyQQ() 的老做法
+function copyTextToPhone(text){
+	var t = document.createElement('textarea');
+	t.value = text;
+	t.style.position = 'fixed';
+	t.style.opacity = '0';
+	document.body.appendChild(t);
+	t.focus();
+	t.setSelectionRange(0, text.length);
+	var ok = false;
+	try { ok = document.execCommand('copy'); } catch (e) {}
+	document.body.removeChild(t);
+	return ok;
+}
+
+$("#btnReadClip").on("click", readTvClipboard);
+$("#btnCopyClip").on("click", function(){
+	var text = lastClipText || $("#inputarea").val() || "";
+	if("" == text){
+		setClipStatus("没有可复制的内容", "err");
+		return;
+	}
+	if(copyTextToPhone(text)){
+		setClipStatus("已复制到手机（" + text.length + " 字）", "ok");
+	}else{
+		setClipStatus("复制失败，请长按输入框手动复制", "err");
+	}
+});
 $("#cbUninstall").on("click",function(){
 	if(this.checked){
 		$(".btn1").addClass("hide");

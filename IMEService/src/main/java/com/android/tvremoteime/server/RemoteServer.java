@@ -142,6 +142,7 @@ public class RemoteServer extends NanoHTTPD
         this.getRequestProcessers.add(new AppIconRequestProcesser(this.mContext));
         this.getRequestProcessers.add(new TVRequestProcesser(this.mContext));
         this.getRequestProcessers.add(new MouseRequestProcesser(this.mContext, this));
+        this.getRequestProcessers.add(new ClipboardRequestProcesser(this.mContext));
         this.getRequestProcessers.add(new OtherGetRequestProcesser(this.mContext));
     }
     private void addPostRequestProcessers(){

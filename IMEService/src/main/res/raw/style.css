@@ -484,6 +484,62 @@ body {
 }
 
 /* ========================================
+   电视剪贴板（电视 → 手机）
+   ======================================== */
+.clip-block {
+	margin-top: var(--spacing-md);
+	padding-top: var(--spacing-md);
+	border-top: 1px solid var(--color-border);
+}
+
+.clip-block-title {
+	font-size: var(--font-size-xs);
+	font-weight: 600;
+	color: var(--color-text-secondary);
+	margin: 0 0 var(--spacing-sm) var(--spacing-xs);
+}
+
+.clip-block .action-buttons {
+	gap: var(--spacing-sm);
+	flex-wrap: wrap;
+}
+
+.btn-fill {
+	flex: 1 1 150px;
+	padding: 10px 16px;
+	background: var(--color-primary);
+	color: #FFFFFF;
+	border: none;
+	border-radius: var(--radius-md);
+	font-size: var(--font-size-sm);
+	font-weight: 500;
+	cursor: pointer;
+	transition: all var(--transition-fast);
+}
+
+.btn-fill:hover {
+	background-color: var(--color-primary-dark);
+}
+
+.btn-fill:active {
+	transform: scale(0.98);
+}
+
+.clip-status {
+	margin-top: var(--spacing-sm);
+	padding: 0 var(--spacing-xs);
+	font-size: var(--font-size-xs);
+}
+
+#clipStatus.ok {
+	color: var(--color-success);
+}
+
+#clipStatus.err {
+	color: var(--color-error);
+}
+
+/* ========================================
    Button Styles
    ======================================== */
 .btn-secondary {
