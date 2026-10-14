@@ -260,8 +260,12 @@ $("#confirm").on("click",function(){
 })
 
 // ==================== 电视剪贴板（电视 → 手机） ====================
-// 完整内容：输入框可能被【输入】清空，点【复制到手机】时要用这里的完整版
-var lastClipText = "";
+// 剪贴板内容放进独立的只读框 #clipText，不占用上面的输入框：
+// 上面的输入框是「待发送给电视」的缓冲区，而页面上的【清空】按钮清的是电视端输入框
+// （data-key='cls' → 电视侧 deleteSurroundingText），管不到手机端的输入框。
+function setClipText(text){
+	$("#clipText").val(text || "");
+}
 
 function setClipStatus(msg, cls){
 	var $s = $("#clipStatus");
@@ -275,22 +279,17 @@ function readTvClipboard(){
 	$.get("/clipboard", function(res){
 		var st = res && res.status;
 		if("ok" == st){
-			lastClipText = res.text || "";
-			var $input = $("#inputarea");
-			if("" != $input.val() && !confirm("输入框已有内容，是否用电视剪贴板的内容覆盖？")){
-				setClipStatus("已读取 " + lastClipText.length + " 字（未覆盖输入框）", "ok");
-				return;
-			}
-			$input.val(lastClipText);
-			setClipStatus("已读取 " + lastClipText.length + " 字", "ok");
+			var text = res.text || "";
+			setClipText(text);
+			setClipStatus("已读取 " + text.length + " 字", "ok");
 		}else if("empty" == st){
-			lastClipText = "";
+			setClipText("");
 			setClipStatus("电视剪贴板为空", "");
 		}else if("not_default_ime" == st){
-			lastClipText = "";
+			setClipText("");
 			setClipStatus("需先把小盒精灵设为默认输入法", "err");
 		}else{
-			lastClipText = "";
+			setClipText("");
 			setClipStatus("读取失败", "err");
 		}
 	}).fail(function(){
@@ -315,7 +314,7 @@ function copyTextToPhone(text){
 
 $("#btnReadClip").on("click", readTvClipboard);
 $("#btnCopyClip").on("click", function(){
-	var text = lastClipText || $("#inputarea").val() || "";
+	var text = $("#clipText").val() || "";
 	if("" == text){
 		setClipStatus("没有可复制的内容", "err");
 		return;
@@ -323,8 +322,12 @@ $("#btnCopyClip").on("click", function(){
 	if(copyTextToPhone(text)){
 		setClipStatus("已复制到手机（" + text.length + " 字）", "ok");
 	}else{
-		setClipStatus("复制失败，请长按输入框手动复制", "err");
+		setClipStatus("复制失败，请长按上方内容手动复制", "err");
 	}
+});
+$("#btnClipClear").on("click", function(){
+	setClipText("");
+	setClipStatus("已清空", "");
 });
 $("#cbUninstall").on("click",function(){
 	if(this.checked){

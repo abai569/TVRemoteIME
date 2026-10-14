@@ -525,10 +525,34 @@ body {
 	transform: scale(0.98);
 }
 
+.clip-text {
+	width: 100%;
+	min-height: 56px;
+	max-height: 150px;
+	margin-top: var(--spacing-sm);
+	padding: var(--spacing-sm);
+	border: 1px solid var(--color-border);
+	border-radius: var(--radius-md);
+	background: var(--color-surface-variant);
+	color: var(--color-text-primary);
+	font-size: var(--font-size-sm);
+	font-family: var(--font-family);
+	resize: vertical;
+}
+
+.clip-text:focus {
+	outline: none;
+	border-color: var(--color-primary);
+}
+
 .clip-status {
 	margin-top: var(--spacing-sm);
 	padding: 0 var(--spacing-xs);
 	font-size: var(--font-size-xs);
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	gap: var(--spacing-sm);
 }
 
 #clipStatus.ok {
