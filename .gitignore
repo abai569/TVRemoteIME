@@ -69,8 +69,9 @@ freeline_project_description.json
 #IMEService
 #IMEService/
 
-#raw
-raw/
+#raw（必须锚定根目录：写成 raw/ 会连 IMEService/src/main/res/raw/ 一起忽略，
+#导致新增的网页资源被静默排除、CI 打出的 APK 缺文件）
+/raw/
 
 # Scripts and temp files
 *.bat
@@ -82,6 +83,9 @@ nul
 
 # Extracted/temp files
 released/apk_extracted/
+
+# released/ 不再维护 APK（AGENTS.md 规则 9）
+released/*.apk
 
 # Screenshots (temp)
 screenshot*.png
