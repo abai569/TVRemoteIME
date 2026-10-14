@@ -314,13 +314,13 @@
 
 注： 输入控制端不需要安装任何APK应用，直接浏览器操作
 
-![示例截图](https://raw.githubusercontent.com/kingthy/TVRemoteIME/master/released/screenshot.png "控制界面示例截图")
+![示例截图](https://raw.githubusercontent.com/abai569/TVRemoteIME/master/released/screenshot.png "控制界面示例截图")
 
-![示例截图](https://raw.githubusercontent.com/kingthy/TVRemoteIME/master/released/screenshot_2.png "控制界面示例截图")
+![示例截图](https://raw.githubusercontent.com/abai569/TVRemoteIME/master/released/screenshot_2.png "控制界面示例截图")
 
-![示例截图](https://raw.githubusercontent.com/kingthy/TVRemoteIME/master/released/screenshot_3.png "控制界面示例截图")
+![示例截图](https://raw.githubusercontent.com/abai569/TVRemoteIME/master/released/screenshot_3.png "控制界面示例截图")
 
-![示例截图](https://raw.githubusercontent.com/kingthy/TVRemoteIME/master/released/screenshot_4.png "控制界面示例截图")
+![示例截图](https://raw.githubusercontent.com/abai569/TVRemoteIME/master/released/screenshot_4.png "控制界面示例截图")
 
 # 版本历史
 
@@ -381,4 +381,4 @@ QQ群号：1109483648， 加入QQ群可以分享直播源、反馈问题及建�
 
 如果您觉得本应用项目对你有帮助，可以赞赏一下作者：）。万水千山总是情，一块十块都是情！
 
-![赞赏二维码](https://raw.githubusercontent.com/kingthy/TVRemoteIME/master/released/reward.png "赞赏二维码")
+![赞赏二维码](https://raw.githubusercontent.com/abai569/TVRemoteIME/master/released/reward.png "赞赏二维码")
