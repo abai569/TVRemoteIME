@@ -92,3 +92,7 @@ screenshot*.png
 
 # Proguard mapping
 proguardMapping.txt
+
+# 本地网页端预览与回归测试台（非 App 产物，不参与打包）
+# 含：真实页面渲染脚本与截图、jQuery 打桩的四状态功能测试台
+ui-mockup/
