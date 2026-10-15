@@ -15,9 +15,9 @@
 			<div class="header-content">
 				<h1 class="app-title">📺 小盒精灵</h1>
 				<div class="version-info">
-					<span>当前版本：<span class="version-code" id="curVer">2.4.8</span></span>
+					<span>当前版本：<span class="version-code" id="curVer">2.4.9</span></span>
 					<a href="#" target="_blank" id="newVerUrl" class="update-link">
-						<span>最新版本：<span class="version-code" id="newVer">2.4.8</span></span>
+						<span>最新版本：<span class="version-code" id="newVer">2.4.9</span></span>
 					</a>
 				</div>
 			</div>
@@ -282,13 +282,13 @@
 	<script src="/ime_core.js"></script>
 
 	<div style="text-align:center; padding:14px 0 20px; font-size:13px; color:#999;">
-		QQ交流群：<span id="qqGroup" style="cursor:pointer; color:#4a90d9; text-decoration:underline;" onclick="copyQQ()">1109483648</span>
+		BUG反馈/定制软件联系微信：<span id="wechatId" style="cursor:pointer; color:#4a90d9; text-decoration:underline;" onclick="copyWeChat()">abai531</span>
 	</div>
 
 	<script>
-	function copyQQ() {
+	function copyWeChat() {
 		var t = document.createElement('textarea');
-		t.value = '1109483648';
+		t.value = 'abai531';
 		t.style.position = 'fixed';
 		t.style.opacity = '0';
 		document.body.appendChild(t);
@@ -296,8 +296,8 @@
 		var ok = false;
 		try { ok = document.execCommand('copy'); } catch (e) {}
 		document.body.removeChild(t);
-		if (ok) { alert('QQ群号已复制：1109483648'); }
-		else { alert('复制失败，请手动复制：1109483648'); }
+		if (ok) { alert('微信号已复制：abai531'); }
+		else { alert('复制失败，请手动复制：abai531'); }
 	}
 	</script>
 </body>

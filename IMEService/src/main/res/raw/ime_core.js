@@ -297,7 +297,7 @@ function readTvClipboard(){
 	});
 }
 
-// http 页面属非安全上下文，navigator.clipboard 不可用，沿用站内 copyQQ() 的老做法
+// http 页面属非安全上下文，navigator.clipboard 不可用，沿用站内 copyWeChat() 的老做法
 function copyTextToPhone(text){
 	var t = document.createElement('textarea');
 	t.value = text;

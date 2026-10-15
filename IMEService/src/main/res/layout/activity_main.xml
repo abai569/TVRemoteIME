@@ -417,14 +417,14 @@
 
     </ScrollView>
 
-    <!-- QQ 交流群（固定屏幕底部，居中，小号字） -->
+    <!-- 联系方式（固定屏幕底部，居中，小号字） -->
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="4dp"
         android:paddingBottom="8dp"
         android:gravity="center"
-        android:text="QQ交流群：1109483648"
+        android:text="BUG反馈/定制软件联系微信：abai531"
         android:textColor="#80606060"
         android:textSize="12sp" />
 
