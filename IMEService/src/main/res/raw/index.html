@@ -15,9 +15,9 @@
 			<div class="header-content">
 				<h1 class="app-title">📺 小盒精灵</h1>
 				<div class="version-info">
-					<span>当前版本：<span class="version-code" id="curVer">2.4.9</span></span>
+					<span>当前版本：<span class="version-code" id="curVer">2.5.0</span></span>
 					<a href="#" target="_blank" id="newVerUrl" class="update-link">
-						<span>最新版本：<span class="version-code" id="newVer">2.4.9</span></span>
+						<span>最新版本：<span class="version-code" id="newVer">2.5.0</span></span>
 					</a>
 				</div>
 			</div>
@@ -80,19 +80,6 @@
 				    <button type="button" class="btn-secondary" id="btnDel" data-key='67' aria-label="退格">退格</button>
 				    <button type="button" class="btn-secondary" id="btnCls" data-key='cls' aria-label="清空">清空</button>
 				</div>
-				<!-- 电视剪贴板（电视 → 手机） -->
-				<div class="clip-block">
-					<div class="clip-block-title">电视剪贴板</div>
-					<div class="action-buttons">
-						<button type="button" class="btn-fill" id="btnReadClip" aria-label="读取电视剪贴板">📋 读取电视剪贴板</button>
-						<button type="button" class="btn-secondary" id="btnCopyClip" aria-label="复制到手机">📱 复制到手机</button>
-					</div>
-					<textarea id="clipText" class="clip-text" readonly placeholder="读到的内容显示在这里" aria-label="电视剪贴板内容"></textarea>
-					<div class="clip-status">
-						<span id="clipStatus" class="status-item" role="status" aria-live="polite">剪贴板：未读取</span>
-						<a href="javascript:void(0);" id="btnClipClear" class="link-small">[清空]</a>
-					</div>
-				</div>
 			</section>
 
 			<!-- File Upload Panel -->
@@ -114,6 +101,20 @@
 					   <span>传送后自动安装APK或播放视频</span>
 				   </label>
 			    </div>
+			</section>
+
+			<!-- 电视剪贴板（电视 → 手机）：独立卡片，不常用，放在控制页最下方 -->
+			<section class="clip-panel">
+				<div class="clip-panel-title">电视剪贴板</div>
+				<div class="action-buttons">
+					<button type="button" class="btn-fill" id="btnReadClip" aria-label="读取电视剪贴板">📋 读取电视剪贴板</button>
+					<button type="button" class="btn-secondary" id="btnCopyClip" aria-label="复制到手机">📱 复制到手机</button>
+				</div>
+				<textarea id="clipText" class="clip-text" readonly placeholder="读到的内容显示在这里" aria-label="电视剪贴板内容"></textarea>
+				<div class="clip-status">
+					<span id="clipStatus" class="status-item" role="status" aria-live="polite">剪贴板：未读取</span>
+					<a href="javascript:void(0);" id="btnClipClear" class="link-small">[清空]</a>
+				</div>
 			</section>
 		</div>
 

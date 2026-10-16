@@ -8,6 +8,10 @@
 
 ## 更新日志（Fork 版本）
 
+### 2026-10 更新（v2.5.0）
+
+- 调整：「电视剪贴板」从"文字输入"卡片中拆出为独立卡片，并移到控制页最下方（不常用功能不再占用输入区视线）
+
 ### 2026-10 更新（v2.4.9）
 
 - 调整：底部联系方式从 QQ 群改为微信号 abai531，点击可复制
@@ -255,7 +259,7 @@
 
 # 安装方法
 
-下载最新版本的APK包：https://github.com/abai569/TVRemoteIME/releases/download/2.4.8/IMEService-2.4.8.apk
+下载最新版本的APK包：https://github.com/abai569/TVRemoteIME/releases/download/2.5.0/IMEService-2.5.0.apk
 
 ## 一、通过adb命令安装应用  
 

@@ -22,8 +22,8 @@ android {
         applicationId 'com.android.tvremoteime'
         minSdk 21
         targetSdk 36
-        versionCode envVersionCode != null ? envVersionCode.toInteger() : 20409
-        versionName envVersionName != null ? envVersionName : "2.4.9"
+        versionCode envVersionCode != null ? envVersionCode.toInteger() : 20500
+        versionName envVersionName != null ? envVersionName : "2.5.0"
     }
 
     signingConfigs {
